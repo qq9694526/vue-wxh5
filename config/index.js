@@ -17,6 +17,13 @@ module.exports = {
         pathRewrite: {
           '^/api': '/api'   //重写接口
         }
+      },
+      '/connect': {
+        target: 'http://open.weixin.qq.com',  //目标接口域名
+        changeOrigin: true,  //是否跨域
+        pathRewrite: {
+          '^/connect': '/connect'   //重写接口
+        }
       }
     },
 

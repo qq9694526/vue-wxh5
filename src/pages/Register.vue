@@ -30,7 +30,6 @@ export default {
   created() {
     const user = this.storage.get("userInfo");
     if (user) {
-      console.log(user);
       const { userName, mobile, busiName, openId, userCate } = user;
       this.userName = userName;
       this.mobile = mobile;

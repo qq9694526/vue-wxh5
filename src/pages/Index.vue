@@ -31,52 +31,13 @@ export default {
   created() {
     // const openId="oJfSQ50fHFMmyzUFVYYx89eTyfa8";//赵海鹏
     // const openId="xxaa";//超级管理员
-    const openId = "oJfSQ59F5-q1_j0hs3NKTWAplSSA"; //郭帅
-
-    this.getInfoByOpenId(openId);
+    // const openId = "oJfSQ59F5-q1_j0hs3NKTWAplSSA"; //郭帅
+    const { join, joinTotal } = this.storage.get("indexInfo");
+    this.join = join;
+    this.joinTotal = joinTotal;
+    this.user = this.storage.get("userInfo");
   },
-  methods: {
-    getInfo() {
-      this.$vux.loading.show();
-      const code = "021QPaT62tzW3K0JYQS62p1LS62QPaT4";
-      this.http
-        .form(`/api/wx/info`, {
-          code,
-          otherOpenId: ""
-        })
-        .then(resp => {
-          this.$vux.loading.hide();
-          if (resp.errno == 0) {
-            const { join, joinTotal, userInfo } = resp.data;
-            this.user = userInfo;
-            this.join = join;
-            this.joinTotal = joinTotal;
-            this.storage.set("userInfo", userInfo);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    },
-    getInfoByOpenId(openId) {
-      this.$vux.loading.show();
-      this.http
-        .form(`/api/wx/get/info`, {
-          openId
-        })
-        .then(resp => {
-          this.$vux.loading.hide();
-          if (resp.errno == 0) {
-            const { join, joinTotal, userInfo } = resp.data;
-            this.user = userInfo;
-            this.join = join;
-            this.joinTotal = joinTotal;
-            this.storage.set("userInfo", userInfo);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    }
-  }
+  methods: {}
 };
 </script>
 <style lang="less" scoped>

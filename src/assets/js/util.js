@@ -48,10 +48,10 @@ http.form = function (url, data) {
 let storage = {}
 storage.set = function (key, data) {
     const str = JSON.stringify(data);
-    sessionStorage.setItem(key, str)
+    localStorage.setItem(key, str)
 }
 storage.get = function (key) {
-    let data = sessionStorage.getItem(key) || null;
+    let data = localStorage.getItem(key) || null;
     return JSON.parse(data)
 }
 
