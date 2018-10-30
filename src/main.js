@@ -2,25 +2,20 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import FastClick from 'fastclick'
-import VueRouter from 'vue-router'
-import routes from './router/index.js'
 import App from './App'
-import { WechatPlugin, ToastPlugin, LoadingPlugin } from 'vux'
+import router from './router/index.js'
 import util from './assets/js/util.js'
+import { WechatPlugin, ToastPlugin, LoadingPlugin } from 'vux'
 
 
 Vue.prototype.host = "http://47.105.59.207:29090/zt-wx";
 Vue.prototype.http = util.http;
 Vue.prototype.storage = util.storage;
 
-Vue.use(VueRouter)
 Vue.use(WechatPlugin)
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 
-const router = new VueRouter({
-  routes
-})
 
 Vue.wechat.config({
   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

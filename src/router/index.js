@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
 import Index from '@/pages/Index'
 import SignUp from '@/pages/SignUp'
 import Home from '@/pages/Home'
@@ -7,7 +10,7 @@ import AdminPerformance from '@/components/AdminPerformance'
 import AdminRankList from '@/components/AdminRankList'
 import AdminCheck from '@/components/AdminCheck'
 
-export default [
+const routes = [
   {
     path: '/',
     name: 'Index',
@@ -53,3 +56,10 @@ export default [
   }
 ]
 
+Vue.use(Router)
+
+const router = new Router({
+  routes
+})
+
+export default router
