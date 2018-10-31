@@ -1,21 +1,21 @@
 import Vue from 'vue'
 import util from './util.js'
-import { WechatPlugin, ToastPlugin, LoadingPlugin } from 'vux'
+// import { WechatPlugin, ToastPlugin, LoadingPlugin } from 'vux'
+import { ToastPlugin, LoadingPlugin } from 'vux'
 
-Vue.use(WechatPlugin)
+// Vue.use(WechatPlugin)
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 
-const wx = Vue.wechat;
+// const wx = Vue.wechat;
 const reqUrl = location.href.split('#')[0];
 
 const parentOpenId = getUrlParam("openId") || "",
     code = getUrlParam("code"),
     user = util.storage.get("userInfo"),
     openId = user ? user.openId : "";
-
+initSdk();
 if (openId) {
-    initSdk();
     getInfoByOpenId(openId);//更新信息
     alert("openId:" + openId)
     alert("parentOpenId:" + parentOpenId)
@@ -73,7 +73,7 @@ function initSdk() {
         if (resp.errno == 0) {
             const { signature, appId, nonceStr, timestamp } = resp.data;
             wx.config({
-                signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage"]
+                signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
             })
         } else {
             // this.$vux.toast.text(resp.errmsg);
