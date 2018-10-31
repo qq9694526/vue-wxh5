@@ -2,10 +2,10 @@
   <div class="p-sign-up">
     <h1>报名</h1>
     <group>
-      <x-input title="姓名" v-model="userName" required :disabled="userCate==3"></x-input>
-      <x-input title="手机" v-model="mobile" required :disabled="userCate==3"></x-input>
+      <x-input title="姓名" v-model="userName" required :disabled="user.userCate==3"></x-input>
+      <x-input title="手机" v-model="mobile" required :disabled="user.userCate==3"></x-input>
     </group>
-    <x-button v-if="userCate==3" type="primary" @click.native="goPay">支付99元</x-button>
+    <x-button v-if="user.userCate==3" type="primary" @click.native="goPay">支付99元</x-button>
     <x-button v-else @click.native="signUp">立即报名</x-button>
   </div>
 </template>
@@ -21,25 +21,23 @@ export default {
   data() {
     return {
       userName: "",
-      mobile: "",
-      userCate: 1
+      mobile: ""
     };
   },
-  created() {
-    const user = this.storage.get("userInfo");
-    if (user) {
-      const { userName, mobile, openId, userCate } = user;
-      this.userName = userName;
-      this.mobile = mobile;
-      this.openId = openId;
-      this.userCate = userCate;
-    } else {
-      this.$vux.toast.text("用户信息获取失败，请稍后重试");
+  computed: {
+    user() {
+      return this.$store.state.user;
     }
+  },
+  created() {
+    const { userName, mobile } = this.user;
+    this.userName = userName;
+    this.mobile = mobile;
   },
   methods: {
     signUp() {
-      const { userName, mobile, openId } = this;
+      const { userName, mobile } = this,
+        { openId } = this.user;
       this.http
         .post(`/api/wx/add/user`, {
           userName,
@@ -49,6 +47,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("报名成功，请支付");
+            //这个需要重新请求更新下user状态
             this.userCate = 3;
           } else {
             this.$vux.toast.text(resp.errmsg);

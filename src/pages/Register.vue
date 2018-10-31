@@ -2,11 +2,11 @@
   <div class="p-register">
     <h1>申请成为商家</h1>
     <group>
-      <x-input title="姓名" v-model="userName" required :disabled="userCate==0"></x-input>
-      <x-input title="手机" v-model="mobile" required :disabled="userCate==0"></x-input>
-      <x-input title="商户" v-model="busiName" required :disabled="userCate==0"></x-input>
+      <x-input title="姓名" v-model="userName" required :disabled="user.userCate==0"></x-input>
+      <x-input title="手机" v-model="mobile" required :disabled="user.userCate==0"></x-input>
+      <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0"></x-input>
     </group>
-    <x-button v-if="userCate==0">审核中……</x-button>
+    <x-button v-if="user.userCate==0">审核中……</x-button>
     <x-button v-else type="primary" @click.native="submit">提交申请</x-button>
   </div>
 </template>
@@ -22,27 +22,24 @@ export default {
     return {
       userName: "",
       mobile: "",
-      busiName: "",
-      openId: "xxaa",
-      userCate: 1
+      busiName: ""
     };
   },
-  created() {
-    const user = this.storage.get("userInfo");
-    if (user) {
-      const { userName, mobile, busiName, openId, userCate } = user;
-      this.userName = userName;
-      this.mobile = mobile;
-      this.busiName = busiName;
-      this.openId = openId;
-      this.userCate = userCate;
-    } else {
-      this.$vux.toast.text("用户信息获取失败，请稍后重试");
+  computed: {
+    user() {
+      return this.$store.state.user;
     }
+  },
+  created() {
+    const { userName, mobile, busiName, openId, userCate } = this.user;
+    this.userName = userName;
+    this.mobile = mobile;
+    this.busiName = busiName;
   },
   methods: {
     submit() {
-      const { userName, mobile, busiName, openId } = this;
+      const { userName, mobile, busiName } = this,
+        { openId } = this.user;
       this.http
         .post(`/api/wx/add/busi`, {
           userName,

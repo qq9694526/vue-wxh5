@@ -18,18 +18,15 @@ export default {
   },
   data() {
     return {
-      user: {},
       imgsrc: ""
     };
   },
-  created() {
-    const user = this.storage.get("userInfo");
-    if (user) {
-      this.user = user;
-    } else {
-      this.$vux.toast.text("用户信息获取失败，请稍后重试");
+  computed: {
+    user() {
+      return this.$store.state.user;
     }
   },
+  created() {},
   methods: {
     signUp() {
       const { openId } = this.user;

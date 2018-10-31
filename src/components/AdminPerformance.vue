@@ -59,10 +59,12 @@ export default {
       currentIndex: 0
     };
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
   created() {
-    const user = this.storage.get("userInfo"),
-      { openId } = user;
-    this.user = user;
     this.getList();
   },
   methods: {

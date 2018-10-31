@@ -8,7 +8,6 @@ import Register from '@/pages/Register'
 import Admin from '@/pages/Admin'
 import AdminPerformance from '@/components/AdminPerformance'
 import AdminRankList from '@/components/AdminRankList'
-import AdminCheck from '@/components/AdminCheck'
 
 const routes = [
   {
@@ -47,10 +46,6 @@ const routes = [
       {
         path: 'ranklist',
         component: AdminRankList
-      },
-      {
-        path: 'check',
-        component: AdminCheck
       }
     ]
   }
