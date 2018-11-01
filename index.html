@@ -8,11 +8,11 @@
   <title>wxh5</title>
   <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
   <script>
+    // 网页授权之获取code
     const code = getUrlParam("code"),
       openId = localStorage.getItem("openId");
     if (!openId && !code) {
-      alert(1)
-      const appid = "wx9cb9ed7d7cc504b7",
+      const appid = "wx0090627ff1ff0a74",
         url = encodeURIComponent(location.href.split('#')[0]);
       location.href = 'http://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + url + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
     }

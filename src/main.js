@@ -17,7 +17,9 @@ Vue.use(LoadingPlugin)
 Vue.prototype.http = util.http;
 Vue.prototype.storage = util.storage;
 Vue.prototype.getUrlParam = util.getUrlParam;
-Vue.prototype.setShare = wxsdk.setShare;
+Vue.prototype.wxsdk = wxsdk;
+
+wxsdk.initConfig();
 
 
 FastClick.attach(document.body)

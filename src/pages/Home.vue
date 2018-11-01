@@ -1,14 +1,22 @@
 <template>
-  <div class="p-hoem">
+  <div class="p-home">
     <h1>我的主页</h1>
     <x-button type="primary" @click.native="signUp" mini>签到</x-button>
+    <x-button type="primary" @click.native="myPoster" mini>我的海报</x-button>
     <x-button type="primary" @click.native="chooseImage" mini>上传图片</x-button>
-    <img :src="imgsrc" alt="">
-
+    <div>--------我上传的图片-----</div>
+    <img id="myPic" :src="user.picAddress" alt="">
+    <div>--------我的海报-----</div>
+    <div id="posterWrap">
+      <h1>这是我的海报</h1>
+      <img :src="base64data" alt="">
+    </div>
+    <img :src="posterSrc" alt="" style="border:1px solid #ccc;">
   </div>
 </template>
 <script>
 import { XButton, XInput, Group } from "vux";
+import html2canvas from "html2canvas";
 
 export default {
   components: {
@@ -18,7 +26,8 @@ export default {
   },
   data() {
     return {
-      imgsrc: ""
+      base64data:"",
+      posterSrc: ""
     };
   },
   computed: {
@@ -28,6 +37,13 @@ export default {
   },
   created() {},
   methods: {
+    myPoster() {
+      const myPosterWrap = document.getElementById("posterWrap");
+      html2canvas(document.body).then(canvas => {
+        // myPosterWrap.appendChild(canvas);
+        this.posterSrc = canvas.toDataURL("image/png");
+      });
+    },
     signUp() {
       const { openId } = this.user;
       this.http
@@ -79,7 +95,8 @@ export default {
           if (resp.errno == 0) {
             this.$vux.toast.text("上传成功");
             //更新个人信息
-            this.imgsrc = resp.data.picAddress;
+            this.base64data = "data:image/jpeg;base64," + baseString;
+            this.$store.commit("updateUser", resp.data);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -89,4 +106,14 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.p-home {
+  img {
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+  }
+}
+</style>
+
 

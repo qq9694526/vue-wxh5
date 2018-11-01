@@ -10,7 +10,69 @@
 export default {
   name: "app",
   data() {
-    return {};
+    return {
+      join: [],
+      joinTotal: 0
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
+  created() {
+    this.parentOpenId = this.getUrlParam("openId") || "";
+    const code = this.getUrlParam("code"),
+      openId = this.storage.get("openId");
+    if (openId) {
+      this.getInfoByOpenId(openId);
+    } else if (code) {
+      this.getInfoByCode(code);
+    }
+  },
+  methods: {
+    updateUser(data) {
+      const { join, joinTotal, userInfo, userInfo: { openId } } = data;
+      this.wxsdk.setShare(openId);
+      this.join = join;
+      this.joinTotal = joinTotal;
+      this.storage.set("openId", openId);
+      this.$store.commit("updateUser", userInfo);
+    },
+    getInfoByCode(code) {
+      this.$vux.loading.show();
+      this.http
+        .form(`/api/wx/info`, {
+          code,
+          otherOpenId: this.parentOpenId
+        })
+        .then(resp => {
+          this.$vux.loading.hide();
+          if (resp.errno == 0) {
+            this.updateUser(resp.data);
+            // const { userInfo: { openId } } = resp.data;
+            // this.storage.set("openId", openId);
+            // location.href = location.origin;
+          } else {
+            this.$vux.toast.text(resp.errmsg);
+          }
+        });
+    },
+    getInfoByOpenId(openId) {
+      this.$vux.loading.show();
+      this.http
+        .form(`/api/wx/get/info`, {
+          openId
+        })
+        .then(resp => {
+          this.$vux.loading.hide();
+          if (resp.errno == 0) {
+            this.updateUser(resp.data);
+          } else {
+            this.$vux.toast.text(resp.errmsg);
+          }
+        });
+    }
   }
 };
 </script>

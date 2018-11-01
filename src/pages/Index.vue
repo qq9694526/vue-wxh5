@@ -1,9 +1,10 @@
 <template>
   <div class="p-index">
-    <div>已报名{{joinTotal}}</div>
+    <div>已报名{{$parent.joinTotal}}</div>
     <router-link to="signup">立即报名</router-link>
     <div>openId:{{user.openId}}</div>
-    <div>openId:{{user.userName}}</div>
+    <div>userName:{{user.userName}}</div>
+    <div>parentOpenId:{{$parent.parentOpenId}}</div>
     <img src="../assets/img/index1.jpeg" alt="">
     <img src="../assets/img/index2.jpeg" alt="">
     <img src="../assets/img/index3.jpeg" alt="">
@@ -24,68 +25,11 @@
 <script>
 export default {
   data() {
-    return {
-      join: [],
-      joinTotal: 0
-    };
-  },
-  created() {
-    // const openId="oJfSQ50fHFMmyzUFVYYx89eTyfa8";//赵海鹏
-    // const openId="xxaa";//超级管理员
-    // const openId = "oJfSQ59F5-q1_j0hs3NKTWAplSSA"; //郭帅
-    this.parentOpenId = this.getUrlParam("openId") || "";
-    const code = this.getUrlParam("code"),
-      openId = this.storage.get("openId");
-    if (openId) {
-      this.getInfoByOpenId(openId);
-    } else if (code) {
-      this.getInfoByCode(code);
-    }
+    return {};
   },
   computed: {
     user() {
       return this.$store.state.user;
-    }
-  },
-  methods: {
-    updateUser(data) {
-      const { join, joinTotal, userInfo } = data;
-      this.join = join;
-      this.joinTotal = joinTotal;
-      this.storage.set("openId", userInfo.openId);
-      this.$store.commit("updateUser", userInfo);
-      this.setShare(userInfo.openId);
-    },
-    getInfoByCode(code) {
-      this.$vux.loading.show();
-      this.http
-        .form(`/api/wx/info`, {
-          code,
-          otherOpenId: this.parentOpenId
-        })
-        .then(resp => {
-          this.$vux.loading.hide();
-          if (resp.errno == 0) {
-            this.updateUser(resp.data);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    },
-    getInfoByOpenId(openId) {
-      this.$vux.loading.show();
-      this.http
-        .form(`/api/wx/get/info`, {
-          openId
-        })
-        .then(resp => {
-          this.$vux.loading.hide();
-          if (resp.errno == 0) {
-            this.updateUser(resp.data);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
     }
   }
 };

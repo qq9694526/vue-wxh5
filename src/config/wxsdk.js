@@ -1,19 +1,22 @@
+// wx-js-sdk授权
 import util from '../assets/js/util.js'
 
-const reqUrl = location.href.split('#')[0];
+let reqUrl = location.href.split('#')[0];
+// reqUrl = encodeURIComponent(reqUrl);
 //获取jssdk需要的签名等参数
-util.http.form('/api/wx/get/sign', {
-    reqUrl
-}).then((resp) => {
-    if (resp.errno == 0) {
-        const { signature, appId, nonceStr, timestamp } = resp.data;
-        wx.config({
-            signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
-        })
-    }
-})
-
 export default {
+    initConfig: () => {
+        util.http.post('/api/wx/get/sign', {
+            reqUrl
+        }).then((resp) => {
+            if (resp.errno == 0) {
+                const { signature, appId, nonceStr, timestamp } = resp.data;
+                wx.config({
+                    signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
+                })
+            }
+        })
+    },
     setShare: (openId) => {
         wx.ready(function () {
             //“分享给朋友”
