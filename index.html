@@ -11,11 +11,11 @@
     // 网页授权之获取code
     const code = getUrlParam("code"),
       openId = localStorage.getItem("openId");
-    if (!openId && !code) {
-      const appid = "wx0090627ff1ff0a74",
-        url = encodeURIComponent(location.href.split('#')[0]);
-      location.href = 'http://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + url + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-    }
+    // if (!openId && !code) {
+    //   const appid = "wx0090627ff1ff0a74",
+    //     url = encodeURIComponent(location.href.split('#')[0]);
+    //   location.href = 'http://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + url + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+    // }
     //获取url中参数
     function getUrlParam(name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

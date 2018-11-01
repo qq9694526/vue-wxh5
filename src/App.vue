@@ -23,7 +23,7 @@ export default {
   created() {
     this.parentOpenId = this.getUrlParam("openId") || "";
     const code = this.getUrlParam("code"),
-      openId = this.storage.get("openId");
+      openId = localStorage.getItem("openId");
     if (openId) {
       this.getInfoByOpenId(openId);
     } else if (code) {
@@ -36,7 +36,7 @@ export default {
       this.wxsdk.setShare(openId);
       this.join = join;
       this.joinTotal = joinTotal;
-      this.storage.set("openId", openId);
+      localStorage.setItem("openId", openId);
       this.$store.commit("updateUser", userInfo);
     },
     getInfoByCode(code) {
@@ -50,9 +50,6 @@ export default {
           this.$vux.loading.hide();
           if (resp.errno == 0) {
             this.updateUser(resp.data);
-            // const { userInfo: { openId } } = resp.data;
-            // this.storage.set("openId", openId);
-            // location.href = location.origin;
           } else {
             this.$vux.toast.text(resp.errmsg);
           }

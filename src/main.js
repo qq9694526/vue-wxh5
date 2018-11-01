@@ -15,7 +15,6 @@ Vue.use(LoadingPlugin)
 
 // Vue.prototype.host = "http://47.105.59.207:29090/zt-wx";
 Vue.prototype.http = util.http;
-Vue.prototype.storage = util.storage;
 Vue.prototype.getUrlParam = util.getUrlParam;
 Vue.prototype.wxsdk = wxsdk;
 

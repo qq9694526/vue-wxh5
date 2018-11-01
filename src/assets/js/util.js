@@ -45,16 +45,6 @@ http.form = function (url, data) {
     })
 }
 
-let storage = {}
-storage.set = function (key, data) {
-    const str = JSON.stringify(data);
-    localStorage.setItem(key, str)
-}
-storage.get = function (key) {
-    let data = localStorage.getItem(key) || null;
-    return JSON.parse(data)
-}
-
 //获取url中参数
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -65,6 +55,5 @@ function getUrlParam(name) {
 
 export default {
     http,
-    storage,
     getUrlParam
 };

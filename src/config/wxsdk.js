@@ -12,7 +12,7 @@ export default {
             if (resp.errno == 0) {
                 const { signature, appId, nonceStr, timestamp } = resp.data;
                 wx.config({
-                    signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
+                    signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseWXPay","chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
                 })
             }
         })
