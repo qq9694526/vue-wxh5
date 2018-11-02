@@ -7,8 +7,10 @@
         <div class="tel">{{user.mobile}}</div>
       </div>
     </div>
-    <div>
-      获得国学少年印象诗.书.礼.乐精品主题小视频拍摄
+    <div class="desc">
+      1、报名勋章，报名并支付报名费获取；</br>
+      2、签到勋章，签到3次获取；</br>
+      3、照片勋章，上传图片获取。
     </div>
     <div class="medal-wrap2">
       <div class="item">
@@ -32,6 +34,7 @@
         <img v-if="user.picAddress" src="../assets/img/medal-3.png" alt="">
         <img v-else src="../assets/img/medal-3-0.png" alt="">
         <p class="name">照片勋章</p>
+        <div class="tip">上传图片后可生成海报</div>
       </div>
       <div class="item right">
         <div class="img-wrap">
@@ -39,26 +42,31 @@
           <img v-if="user.picAddress" :src="user.picAddress" alt="">
           <div v-else class="">未上传</div>
         </div>
-        <div class="btn" @click="chooseImage">上传图片</div>
+        <div v-if="user.qrAddress" class="btn" @click="isShowPoster=true">我的海报</div>
+        <div v-else-if="user.picAddress" class="btn" @click="createPoster">生成海报</div>
+        <div v-else class="btn" @click="chooseImage">上传图片</div>
       </div>
     </div>
-
-    <!-- <x-button type="primary" @click.native="signUp" mini>签到</x-button> -->
-    <!-- <x-button type="primary" @click.native="myPoster" mini>我的海报</x-button>
-    <x-button type="primary" @click.native="chooseImage" mini>上传图片</x-button>
-    <div>--------我上传的图片-----</div>
-    <img id="myPic" :src="user.picAddress" alt="">
-    <div>--------我的海报-----</div>
-    <div id="posterWrap">
-      <h1>这是我的海报</h1>
-      <img :src="base64data" alt="">
+    <div class="poster-mask" :class="{hidden:!isShowPoster}" @click.self="isShowPoster=false">
+      <div v-if="user.qrAddress" class="poster-wrap">
+        <img :src="posterSrc||user.qrAddress" alt="">
+      </div>
+      <div v-else-if="posterSrc" class="poster-wrap">
+        <img :src="posterSrc" alt="">
+      </div>
+      <div v-else id="posterWrap" class="poster-wrap">
+        <img src="../assets/img/poster.png" alt="">
+        <canvas id="canvas"></canvas>
+        <img class="qrcode" :src="qrcodeSrc" alt="">
+      </div>
     </div>
-    <img :src="posterSrc" alt="" style="border:1px solid #ccc;"> -->
   </div>
 </template>
 <script>
 import { XButton, XInput, Group } from "vux";
 import html2canvas from "html2canvas";
+import { setTimeout } from "timers";
+import QRCode from "qrcode";
 
 export default {
   components: {
@@ -69,7 +77,9 @@ export default {
   data() {
     return {
       base64data: "",
-      posterSrc: ""
+      posterSrc: "",
+      qrcodeSrc: "",
+      isShowPoster: false
     };
   },
   computed: {
@@ -79,12 +89,50 @@ export default {
   },
   created() {},
   methods: {
-    myPoster() {
+    createPoster() {
+      this.$vux.loading.show();
+      this.isShowPoster = true;
       const myPosterWrap = document.getElementById("posterWrap");
-      html2canvas(document.body).then(canvas => {
-        // myPosterWrap.appendChild(canvas);
-        this.posterSrc = canvas.toDataURL("image/png");
+      this.useqrcode(() => {
+        setTimeout(() => {
+          html2canvas(myPosterWrap).then(canvas => {
+            this.posterSrc = canvas.toDataURL("image/png");
+            this.uploadPosterImg(this.posterSrc);
+          });
+        }, 1000);
       });
+    },
+    useqrcode(callback) {
+      //生成的二维码内容，可以添加变量
+      const self = this;
+      // const text = location.origin + "?openId=" + this.user.openId;
+      const text =
+        "http://http://www.zhaohaipeng.com/?openId=" + this.user.openId;
+      var canvas = document.getElementById("canvas");
+      QRCode.toCanvas(canvas, text, function(error) {
+        if (error) console.error(error);
+        self.qrcodeSrc = canvas.toDataURL("image/png");
+        callback();
+      });
+    },
+    uploadPosterImg(base64) {
+      const baseString = base64.replace("data:image/png;base64,", ""),
+        { openId } = this.user;
+      this.http
+        .form(`/api/wx/uploadPic`, {
+          openId,
+          baseString,
+          status: 1 //0-个人图片上传，1-合成图片上传
+        })
+        .then(resp => {
+          if (resp.errno == 0) {
+            //更新个人信息
+            this.$store.commit("updateUser", resp.data);
+          } else {
+            this.$vux.toast.text(resp.errmsg);
+          }
+          this.$vux.loading.hide();
+        });
     },
     goPay() {
       this.$vux.loading.show();
@@ -200,6 +248,41 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+#canvas {
+  position: absolute;
+  right: 16%;
+  bottom: 6%;
+  width: 31%;
+  z-index: -100;
+}
+.poster-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  &.hidden {
+    display: none;
+  }
+  .poster-wrap {
+    position: relative;
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    > img {
+      width: 100%;
+    }
+    .qrcode {
+      position: absolute;
+      right: 16%;
+      bottom: 6%;
+      width: 31%;
+    }
+  }
+}
 .p-home {
   background-image: url("../assets/img/bg.png");
   background-size: 100% auto;
@@ -217,11 +300,11 @@ export default {
     align-items: center;
     margin-bottom: 10px;
     > img {
-      flex: 0 0 70px;
-      width: 70px;
-      height: 70px;
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      margin-right: 20px;
+      margin-right: 15px;
       border: 4px solid #fff;
     }
     .text {
@@ -235,6 +318,9 @@ export default {
       }
     }
   }
+  .desc {
+    padding: 0 10px;
+  }
   .medal-wrap {
     display: flex;
     border: 2px dashed #333;
@@ -245,10 +331,12 @@ export default {
       flex: 0 0 50%;
       text-align: center;
       &.left {
+        position: relative;
         font-size: 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding-bottom: 20px;
         .name {
           font-size: 14px;
           color: #666;
@@ -257,6 +345,14 @@ export default {
         > img {
           display: inline-block;
           width: 70px;
+        }
+        .tip {
+          position: absolute;
+          bottom: 5px;
+          left: 0;
+          right: 0;
+          color: #fdbe03;
+          font-size: 14px;
         }
       }
       &.right {
