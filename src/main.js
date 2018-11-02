@@ -7,11 +7,13 @@ import router from './config/router.js'
 import store from './config/store.js'
 import wxsdk from './config/wxsdk.js'
 import util from './assets/js/util.js'
+import vuePlugin from './assets/js/vue-plugin.js'
 
 import { ToastPlugin, LoadingPlugin } from 'vux'
 
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
+Vue.use(vuePlugin)
 
 // Vue.prototype.host = "http://47.105.59.207:29090/zt-wx";
 Vue.prototype.http = util.http;

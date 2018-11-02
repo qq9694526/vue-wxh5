@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <transition name="fade">
+  <div id="app">
       <router-view></router-view>
-    </transition>
+    <!-- <transition name="fade">
+      <router-view></router-view>
+    </transition> -->
   </div>
 </template>
 
@@ -89,11 +90,28 @@ body {
   font-family: "微软雅黑";
   font-size: 14px;
 }
+.vux-popup-mask {
+  background: rgba(0, 0, 0, 0.2);
+}
+#app {
+  height: 100%;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.btn {
+  display: inline-block;
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  text-align: center;
+  color: #fff;
+  background-color: #fdbe03;
+  font-size: 18px;
 }
 </style>

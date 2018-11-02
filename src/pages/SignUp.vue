@@ -74,14 +74,6 @@ export default {
               signType,
               paySign
             } = resp.data;
-            let json = {
-              timestamp,
-              nonceStr,
-              packages,
-              signType,
-              paySign
-            };
-            alert("sign:" + JSON.stringify(json));
             wx.chooseWXPay({
               timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
               nonceStr, // 支付签名随机串，不长于 32 位
@@ -90,11 +82,7 @@ export default {
               paySign, // 支付签名
               success: res => {
                 // 支付成功后的回调函数
-                alert("成功回调:" + JSON.stringify(res));
                 this.paySuccess();
-              },
-              error: res => {
-                alert("失败回调:" + JSON.stringify(res));
               }
             });
           } else {
