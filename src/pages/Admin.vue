@@ -26,7 +26,7 @@ export default {
     TabbarItem
   },
   created(){
-      
+      console.log(this.$route.path)
   }
 };
 </script>

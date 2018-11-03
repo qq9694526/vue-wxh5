@@ -54,7 +54,17 @@ const routes = [
 Vue.use(Router)
 
 const router = new Router({
+  mode: 'history',
   routes
 })
+// router.beforeEach(function (to, from, next) {
+//   //console.log(to,from,next)
+//   //需求登录判断
+//   if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
+//     location.href = location.origin + to.path
+//   } else {
+//     next();
+//   }
+// })
 
 export default router

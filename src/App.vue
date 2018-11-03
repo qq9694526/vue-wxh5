@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <router-view></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -26,6 +26,13 @@ export default {
       this.getInfoByOpenId(openId);
     } else if (code) {
       this.getInfoByCode(code);
+    }
+  },
+  watch: {
+    $route() {
+      if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
+        location.reload();
+      }
     }
   },
   methods: {
@@ -84,14 +91,21 @@ body {
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
   background-color: #fbf9fe;
-  font-family: "微软雅黑";
+  font-family: Microsoft YaHei;
   font-size: 14px;
 }
 .vux-popup-mask {
   background: rgba(0, 0, 0, 0.2);
 }
 #app {
+  width: 100%;
   height: 100%;
+  background: #fff;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .btn {
   display: inline-block;

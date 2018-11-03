@@ -9,9 +9,13 @@
       <img class="img-padding" src="../assets/img/6.png" alt="">
       <img class="img-padding" src="../assets/img/7.png" alt="">
       <img class="img-padding" src="../assets/img/8.png" alt="">
+      <!-- <div v-for="(src,index) in imgList">
+        <x-img :src="src"></x-img>
+      </div> -->
     </div>
     <div class="bottom" v-if="user.userCate!=2">
-      <router-link class="circle" to="register">成为商家</router-link>
+      <!-- <router-link class="circle" to="/register">成为商家</router-link> -->
+      <div class="circle" @click="$router.push('register')">成为商家</div>
     </div>
     <!-- userCate//0-待审核商户，1-普通用户,2已审核商户,3-已报名用户（未缴费） -->
     <div class="btn-fixed">
@@ -28,8 +32,8 @@
       <popup v-model="signupPopup" position="top">
         <div class="popup0">
           <group>
-            <x-input title="姓名" v-model="userName" required :disabled="user.userCate==3"></x-input>
-            <x-input title="手机" v-model="mobile" required :disabled="user.userCate==3"></x-input>
+            <x-input title="姓名" v-model="userName" required :disabled="user.userCate==3" is-type="china-name"></x-input>
+            <x-input title="手机" v-model="mobile" type="tel" required :disabled="user.userCate==3" is-type="china-mobile"></x-input>
           </group>
           <!-- <x-button @click.native="signUp">立即报名</x-button> -->
           <div class="btn-wrap">
@@ -41,14 +45,15 @@
   </div>
 </template>
 <script>
-import { XButton, XInput, Group, Popup, TransferDom } from "vux";
+import { XButton, XInput, Group, Popup, TransferDom, XImg } from "vux";
 
 export default {
   components: {
     XButton,
     XInput,
     Group,
-    Popup
+    Popup,
+    XImg
   },
   directives: {
     TransferDom
@@ -57,7 +62,17 @@ export default {
     return {
       signupPopup: false,
       userName: "",
-      mobile: ""
+      mobile: "",
+      imgList: [
+        require("../assets/img/1.png"),
+        require("../assets/img/2.png"),
+        require("../assets/img/3.png"),
+        require("../assets/img/4.png"),
+        require("../assets/img/5.png"),
+        require("../assets/img/6.png"),
+        require("../assets/img/7.png"),
+        require("../assets/img/8.png")
+      ]
     };
   },
   computed: {
@@ -81,6 +96,10 @@ export default {
     signUp() {
       const { userName, mobile } = this,
         { openId } = this.user;
+      if (!userName || !mobile) {
+        this.$vux.toast.text("请填写完整信息");
+        return;
+      }
       this.http
         .post(`/api/wx/add/user`, {
           userName,
@@ -151,7 +170,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .vux-popup-dialog.vux-popup-top {
-  background-color: #fff;
+  background: #fff;
   width: 95%;
   margin: 0 auto;
   right: 0;

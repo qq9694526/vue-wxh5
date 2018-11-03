@@ -3,7 +3,7 @@
     <div class="title">申请成为商家</div>
     <group>
       <x-input title="姓名" v-model="userName" required :disabled="user.userCate==0"></x-input>
-      <x-input title="手机" v-model="mobile" required :disabled="user.userCate==0"></x-input>
+      <x-input title="手机" v-model="mobile" required :disabled="user.userCate==0" is-type="china-mobile"></x-input>
       <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0"></x-input>
     </group>
     <div v-if="user.userCate==0" class="btn">审核中……</div>
@@ -50,6 +50,10 @@ export default {
     submit() {
       const { userName, mobile, busiName } = this,
         { openId } = this.user;
+      if (!userName || !mobile || !busiName) {
+        this.$vux.toast.text("请填写完整信息");
+        return;
+      }
       this.http
         .post(`/api/wx/add/busi`, {
           userName,
@@ -70,14 +74,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.p-register{
+.p-register {
   text-align: center;
-  .title{
+  .title {
     color: #333;
     font-size: 20px;
     margin-top: 30px;
   }
-  .btn{
+  .btn {
     margin: 20px 0;
   }
 }
