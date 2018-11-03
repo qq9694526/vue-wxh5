@@ -1,13 +1,15 @@
 <template>
   <div class="p-register">
-    <h1>申请成为商家</h1>
+    <div class="title">申请成为商家</div>
     <group>
       <x-input title="姓名" v-model="userName" required :disabled="user.userCate==0"></x-input>
       <x-input title="手机" v-model="mobile" required :disabled="user.userCate==0"></x-input>
       <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0"></x-input>
     </group>
-    <x-button v-if="user.userCate==0">审核中……</x-button>
-    <x-button v-else type="primary" @click.native="submit">提交申请</x-button>
+    <div v-if="user.userCate==0" class="btn">审核中……</div>
+    <div v-else class="btn" @click="submit">提交申请</div>
+    <!-- <x-button v-if="user.userCate==0">审核中……</x-button>
+    <x-button v-else type="primary" @click.native="submit">提交申请</x-button> -->
   </div>
 </template>
 <script>
@@ -30,6 +32,14 @@ export default {
       return this.$store.state.user;
     }
   },
+  watch: {
+    user() {
+      const { userName, mobile, busiName, openId, userCate } = this.user;
+      this.userName = userName || "";
+      this.mobile = mobile || "";
+      this.busiName = busiName || "";
+    }
+  },
   created() {
     const { userName, mobile, busiName, openId, userCate } = this.user;
     this.userName = userName;
@@ -50,6 +60,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("提交成功");
+            this.$parent.getInfoByOpenId(openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -58,4 +69,18 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.p-register{
+  text-align: center;
+  .title{
+    color: #333;
+    font-size: 20px;
+    margin-top: 30px;
+  }
+  .btn{
+    margin: 20px 0;
+  }
+}
+</style>
+
 

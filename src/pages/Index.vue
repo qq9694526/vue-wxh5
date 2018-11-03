@@ -65,6 +65,13 @@ export default {
       return this.$store.state.user;
     }
   },
+  watch: {
+    user() {
+      const { userName, mobile } = this.user;
+      this.userName = userName;
+      this.mobile = mobile;
+    }
+  },
   created() {
     const { userName, mobile } = this.user;
     this.userName = userName;
@@ -167,7 +174,7 @@ export default {
   background-repeat: repeat-y;
   min-height: 100%;
   box-sizing: border-box;
-  .img-padding{
+  .img-padding {
     width: 85%;
     margin: 40px auto;
   }

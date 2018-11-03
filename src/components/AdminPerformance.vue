@@ -19,8 +19,8 @@
           <div class="line">
             <span>{{item.mobile}}</span>
             <div>
-              <span class="btn" @click="busiReject(item.openId)">拒绝</span>
-              <span class="btn btn-p" @click="busiCheck(item.openId)">通过</span>
+              <span class="smallbtn" @click="busiReject(item.openId)">拒绝</span>
+              <span class="smallbtn btn-p" @click="busiCheck(item.openId)">通过</span>
             </div>
           </div>
         </div>
@@ -30,12 +30,12 @@
             <span>{{item.mobile}}</span>
           </div>
           <div class="line">
-            <span>状态:{{item.medal}}</span>
+            <span>状态:{{item.orPay==0?"未支付":"已支付"}}</span>
             <span>封面:{{item.picAddress?"已上传":"未上传"}}</span>
           </div>
           <div class="line">
             <span>业绩:{{item.busiName}}</span>
-            <span>{{item.createTime}}</span>
+            <span>{{item.createTime|dateFormat}}</span>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import { Tab, TabItem, TabbarItem, XButton } from "vux";
+import { Tab, TabItem, TabbarItem, XButton, dateFormat } from "vux";
 export default {
   components: {
     Tab,
@@ -64,8 +64,16 @@ export default {
       return this.$store.state.user;
     }
   },
+  watch: {
+    user() {
+      this.getList();
+    }
+  },
   created() {
     this.getList();
+  },
+  filters: {
+    dateFormat
   },
   methods: {
     onItemClick(index) {
@@ -73,6 +81,9 @@ export default {
     },
     getList() {
       const { openId } = this.user;
+      if (!openId) {
+        return;
+      }
       this.http.form(`/api/wx/eve/busi`, { openId }).then(resp => {
         if (resp.errno == 0) {
           const datas = resp.data;
@@ -83,7 +94,6 @@ export default {
             datas.medal.info,
             datas.check.info
           ];
-          console.log(this.list[3]);
         } else {
           this.$vux.toast.text(resp.errmsg);
         }
@@ -138,7 +148,7 @@ export default {
           line-height: 20px;
           justify-content: space-between;
         }
-        .btn {
+        .smallbtn {
           display: inline-block;
           border: 1px solid #ccc;
           border-radius: 10px;

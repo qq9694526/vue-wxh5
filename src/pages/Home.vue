@@ -358,7 +358,7 @@ export default {
       &.right {
         .img-wrap {
           position: relative;
-          width: 70%;
+          width: 75%;
           margin: 0 auto 10px auto;
           .img-place {
             width: 100%;
