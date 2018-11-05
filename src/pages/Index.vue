@@ -188,13 +188,13 @@ export default {
 }
 .p-index {
   padding-bottom: 50px;
-  background-image: url("../assets/img/bg.png");
+  background-image: url("../assets/img/bg.jpg");
   background-size: 100% auto;
   background-repeat: repeat-y;
   min-height: 100%;
   box-sizing: border-box;
   .img-padding {
-    width: 85%;
+    // width: 85%;
     margin: 40px auto;
   }
   img {

@@ -11,7 +11,6 @@
     // 网页授权之获取code
     const code = getUrlParam("code"),
       openId = localStorage.getItem("openId");
-      // openId = null;
     if (!openId && !code) {
       const appid = "wx0090627ff1ff0a74",
         url = encodeURIComponent(location.href.split('#')[0]);

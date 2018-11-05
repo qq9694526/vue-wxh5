@@ -55,9 +55,17 @@
         <img :src="posterSrc" alt="">
       </div>
       <div v-else id="posterWrap" class="poster-wrap">
-        <img src="../assets/img/poster.png" alt="">
-        <canvas id="canvas"></canvas>
-        <img class="qrcode" :src="qrcodeSrc" alt="">
+        <div class="img-place"></div>
+        <div class="content">
+          <img class="poster-top" src="../assets/img/poster-top.png" alt="">
+          <div class="poster-img-wrap">
+            <div class="poster-img-place"></div>
+            <img class="poster-img" :src="user.picAddress||require('../assets/img/poster-img.png')" alt="">
+          </div>
+          <img class="poster-bottom" src="../assets/img/poster-bottom.png" alt="">
+          <img class="qrcode" :src="qrcodeSrc" alt="">
+          <canvas id="canvas"></canvas>
+        </div>
       </div>
     </div>
   </div>
@@ -106,8 +114,7 @@ export default {
       //生成的二维码内容，可以添加变量
       const self = this;
       // const text = location.origin + "?openId=" + this.user.openId;
-      const text =
-        "http://http://www.zhaohaipeng.com/?openId=" + this.user.openId;
+      const text = location.origin + "?openId=" + this.user.openId;
       var canvas = document.getElementById("canvas");
       QRCode.toCanvas(canvas, text, function(error) {
         if (error) console.error(error);
@@ -275,16 +282,72 @@ export default {
     > img {
       width: 100%;
     }
+    .img-place {
+      width: 100%;
+      padding-top: 178%;
+    }
+    .content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url(../assets/img/bg.jpg);
+      background-size: 100% auto;
+      background-repeat-y: repeat;
+      .poster-top {
+        position: absolute;
+        top: 3%;
+        left: 0;
+        right: 0;
+        width: 60%;
+        margin: 0 auto;
+      }
+      .poster-bottom {
+        position: absolute;
+        top: 74%;
+        left: 13%;
+        width: 37%;
+      }
+      .poster-img-wrap {
+        position: absolute;
+        top: 34%;
+        left: 0;
+        right: 0;
+        width: 90%;
+        margin: 0 auto;
+        &:after {
+          position: absolute;
+          content: "";
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          box-shadow: 0 0 25px 25px #ece6d6 inset;
+        }
+        .poster-img-place {
+          width: 100%;
+          padding-top: 71.5%;
+        }
+        .poster-img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
     .qrcode {
       position: absolute;
-      right: 16%;
+      right: 13%;
       bottom: 6%;
       width: 31%;
     }
   }
 }
 .p-home {
-  background-image: url("../assets/img/bg.png");
+  background-image: url("../assets/img/bg.jpg");
   background-size: 100% auto;
   background-repeat: repeat-y;
   padding: 30px 20px;
