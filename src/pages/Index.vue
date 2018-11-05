@@ -4,6 +4,19 @@
       <img src="../assets/img/1.png" alt="">
       <img src="../assets/img/2.png" alt="">
       <img src="../assets/img/3.png" alt="">
+      <div class="nums-wrap">
+        已经有
+        <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
+      </div>
+      <vue-seamless :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
+        <div class="users-wrap">
+          <div v-for="item in $parent.join" class="user">
+            <img :src="item.wxPic" alt="">
+            <div>{{item.userName}}</div>
+          </div>
+        </div>
+      </vue-seamless>
+      <div class="pop-wrap">活动浏览量：{{$parent.pop}}</div>
       <img class="img-padding" src="../assets/img/4.png" alt="">
       <img class="img-padding" src="../assets/img/5.png" alt="">
       <img class="img-padding" src="../assets/img/6.png" alt="">
@@ -17,6 +30,14 @@
       <!-- <router-link class="circle" to="/register">成为商家</router-link> -->
       <div class="circle" @click="$router.push('register')">成为商家</div>
     </div>
+    <a class="tel-fixed" href="tel:4008001234">
+      <img src="../assets/img/icon-tel.png" alt="">
+    </a>
+    <div class="aduio-wrap" @click="togglePlay">
+      <img v-if="musicPlaying" src="../assets/img/music-runing.gif" alt="">
+      <img v-else src="../assets/img/music-stop.png" alt="">
+    </div>
+    <audio id="audio" src="../../static/bg.mp3" autoplay loop></audio>
     <!-- userCate//0-待审核商户，1-普通用户,2已审核商户,3-已报名用户（未缴费） -->
     <div class="btn-fixed">
       <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
@@ -46,20 +67,23 @@
 </template>
 <script>
 import { XButton, XInput, Group, Popup, TransferDom, XImg } from "vux";
-
+import { debug } from "util";
+import vueSeamless from "vue-seamless-scroll";
 export default {
   components: {
     XButton,
     XInput,
     Group,
     Popup,
-    XImg
+    XImg,
+    vueSeamless
   },
   directives: {
     TransferDom
   },
   data() {
     return {
+      musicPlaying: true,
       signupPopup: false,
       userName: "",
       mobile: "",
@@ -72,7 +96,12 @@ export default {
         require("../assets/img/6.png"),
         require("../assets/img/7.png"),
         require("../assets/img/8.png")
-      ]
+      ],
+      numList: [0],
+      seamlessOption: {
+        step: 0.5,
+        limitMoveNum: 10
+      }
     };
   },
   computed: {
@@ -85,14 +114,31 @@ export default {
       const { userName, mobile } = this.user;
       this.userName = userName;
       this.mobile = mobile;
+    },
+    "$parent.joinTotal"() {
+      this.numList = this.$parent.joinTotal.toString().split("");
     }
   },
   created() {
     const { userName, mobile } = this.user;
     this.userName = userName;
     this.mobile = mobile;
+    this.numList = toString(this.$parent.joinTotal).split("");
+    this.pop = this.$parent.pop;
+    this.join = this.$parent.join;
   },
   methods: {
+    togglePlay() {
+      const isPlaying = this.musicPlaying,
+        audio = document.getElementById("audio");
+      if (isPlaying) {
+        this.musicPlaying = false;
+        audio.pause();
+      } else {
+        this.musicPlaying = true;
+        audio.play();
+      }
+    },
     signUp() {
       const { userName, mobile } = this,
         { openId } = this.user;
@@ -201,6 +247,64 @@ export default {
     display: block;
     width: 100%;
   }
+  .vue-seamless {
+    overflow: hidden;
+    height: 178px;
+  }
+  .users-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #515151;
+    // height: 181px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    // overflow: hidden;
+    .user {
+      flex: 0 0 20%;
+      text-align: center;
+      box-sizing: border-box;
+      color: #fff;
+      padding: 8px 0;
+      > img {
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+        border-radius: 50%;
+      }
+    }
+  }
+  .pop-wrap {
+    background-color: #2f2f2f;
+    color: #fff;
+    line-height: 40px;
+    font-size: 20px;
+    text-align: center;
+  }
+  .nums-wrap {
+    display: flex;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    background-color: #fbda4e;
+    justify-content: center;
+    align-items: center;
+    .num {
+      display: inline-block;
+      background-color: #333;
+      width: 22px;
+      height: 34px;
+      line-height: 34px;
+      color: #fbda4e;
+      text-align: center;
+      border-radius: 6px;
+      margin: 0 3px;
+      font-size: 16px;
+      font-weight: 200;
+    }
+  }
   .bottom {
     background-color: #ccc;
     text-align: center;
@@ -235,6 +339,23 @@ export default {
       height: 40px;
       background-color: red;
       border-radius: 50%;
+    }
+  }
+  .tel-fixed {
+    position: fixed;
+    left: 10px;
+    bottom: 70px;
+    width: 50px;
+  }
+  .aduio-wrap {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    width: 30px;
+    height: 30px;
+    > img {
+      width: 100%;
+      height: 100%;
     }
   }
 }

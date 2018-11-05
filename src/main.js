@@ -9,12 +9,15 @@ import wxsdk from './config/wxsdk.js'
 import util from './assets/js/util.js'
 import vuePlugin from './assets/js/vue-plugin.js'
 import QRCode from 'qrcode'
+import scroll from 'vue-seamless-scroll'
 
 import { ToastPlugin, LoadingPlugin } from 'vux'
 
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(vuePlugin)
+Vue.use(scroll)
+
 
 // Vue.prototype.host = "http://47.105.59.207:29090/zt-wx";
 Vue.prototype.http = util.http;

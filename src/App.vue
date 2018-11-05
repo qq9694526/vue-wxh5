@@ -10,7 +10,8 @@ export default {
   data() {
     return {
       join: [],
-      joinTotal: 0
+      joinTotal: 0,
+      pop: 0
     };
   },
   computed: {
@@ -29,24 +30,27 @@ export default {
     }
     window.addEventListener("pageshow", function(e) {
       // 通过persisted属性判断是否存在 BF Cache
-      if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)&&e.persisted) {
+      if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent) && e.persisted) {
         location.reload();
       }
     });
+    // 微信提供的事件，微信浏览器内部初始化完成后
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      function() {
+        document.getElementById("audio").load();
+      },
+      false
+    );
   },
-  // watch: {
-  //   $route() {
-  //     if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
-  //       location.reload();
-  //     }
-  //   }
-  // },
   methods: {
     updateUser(data) {
-      const { join, joinTotal, userInfo, userInfo: { openId } } = data;
+      const { join, joinTotal, pop, userInfo, userInfo: { openId } } = data;
       this.wxsdk.setShare(openId);
-      this.join = join;
+      let joinLimit = join.length % 5;
+      this.join = join.slice(0, join.length - joinLimit);
       this.joinTotal = joinTotal;
+      this.pop = pop;
       localStorage.setItem("openId", openId);
       this.$store.commit("updateUser", userInfo);
     },
