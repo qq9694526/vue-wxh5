@@ -73,8 +73,8 @@
 <script>
 import { XButton, XInput, Group } from "vux";
 import html2canvas from "html2canvas";
-import { setTimeout } from "timers";
 import QRCode from "qrcode";
+import { setTimeout } from "timers";
 
 export default {
   components: {

@@ -40,9 +40,19 @@
     <audio id="audio" src="../../static/bg.mp3" autoplay loop></audio>
     <!-- userCate//0-待审核商户，1-普通用户,2已审核商户,3-已报名用户（未缴费） -->
     <div class="btn-fixed">
-      <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
+      <img v-if="user.userCate!=2&&user.userCate!=3" @click="signupPopup=true" src="../assets/img/signup.png" alt="">
+      <div v-else class="flex-btn">
+        <div class="left">
+          <img @click="showPoster" src="../assets/img/share.png" alt="">
+        </div>
+        <div class="right">
+          <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/mymedal.png" alt="">
+          <img v-else-if="user.userCate==3" @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
+        </div>
+      </div>
+      <!-- <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
       <img v-else-if="user.userCate==3" @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
-      <img v-else @click="signupPopup=true" src="../assets/img/signup.png" alt="">
+      <img v-else @click="signupPopup=true" src="../assets/img/signup.png" alt=""> -->
     </div>
     <!-- <div>已报名{{$parent.joinTotal}}</div>
     <router-link to="signup">立即报名</router-link>
@@ -63,12 +73,25 @@
         </div>
       </popup>
     </div>
+    <div class="poster-mask" :class="{hidden:!isShowPoster}" @click.self="isShowPoster=false">
+      <div v-if="posterSrc" class="poster-wrap">
+        <p class="tip">↓↓长按图片可保存至本地或发送给朋友↓↓</p>
+        <img :src="posterSrc" alt="">
+      </div>
+      <div v-else id="posterWrap" class="poster-wrap">
+        <img src="../assets/img/poster.png" alt="">
+        <img class="qrcode" :src="qrcodeSrc" alt="">
+        <canvas id="canvas"></canvas>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { XButton, XInput, Group, Popup, TransferDom, XImg } from "vux";
 import { debug } from "util";
 import vueSeamless from "vue-seamless-scroll";
+import html2canvas from "html2canvas";
+import QRCode from "qrcode";
 export default {
   components: {
     XButton,
@@ -83,6 +106,8 @@ export default {
   },
   data() {
     return {
+      posterSrc: "",
+      isShowPoster: false,
       musicPlaying: true,
       signupPopup: false,
       userName: "",
@@ -128,6 +153,30 @@ export default {
     this.join = this.$parent.join;
   },
   methods: {
+    showPoster() {
+      this.$vux.loading.show();
+      this.isShowPoster = true;
+      const myPosterWrap = document.getElementById("posterWrap");
+      this.useqrcode(() => {
+        setTimeout(() => {
+          html2canvas(myPosterWrap).then(canvas => {
+            this.posterSrc = canvas.toDataURL("image/png");
+            this.$vux.loading.hide();
+          });
+        }, 1000);
+      });
+    },
+    useqrcode(callback) {
+      //生成的二维码内容，可以添加变量
+      const self = this;
+      const text = location.origin + "?openId=" + this.user.openId;
+      var canvas = document.getElementById("canvas");
+      QRCode.toCanvas(canvas, text, function(error) {
+        if (error) console.error(error);
+        self.qrcodeSrc = canvas.toDataURL("image/png");
+        callback();
+      });
+    },
     togglePlay() {
       const isPlaying = this.musicPlaying,
         audio = document.getElementById("audio");
@@ -215,6 +264,50 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+#canvas {
+  position: absolute;
+  right: 16%;
+  bottom: 6%;
+  width: 31%;
+  z-index: -100;
+}
+.poster-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  &.hidden {
+    display: none;
+  }
+  .poster-wrap {
+    position: relative;
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    > img {
+      width: 100%;
+    }
+    .qrcode {
+      position: absolute;
+      right: 16%;
+      bottom: 6%;
+      width: 31%;
+    }
+    .tip {
+      position: absolute;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 10px;
+      top: -30px;
+      right: 0;
+      left: 0;
+    }
+  }
+}
 .vux-popup-dialog.vux-popup-top {
   background: #fff;
   width: 95%;
@@ -320,13 +413,25 @@ export default {
     width: 100%;
     background-color: rgba(38, 28, 28, 0.9);
     text-align: center;
-    height: 50px;
-    padding: 10px 0;
     box-sizing: border-box;
     img {
-      display: inline-block;
+      display: block;
       width: auto;
       height: 100%;
+      height: 30px;
+      padding: 10px 0;
+      margin: 0 auto;
+    }
+    .flex-btn {
+      display: flex;
+      .left {
+        flex: 0 0 50%;
+        background-color: rgba(38, 28, 28, 0.9);
+      }
+      .right {
+        flex: 0 0 50%;
+        background-color: rgba(251, 218, 78, 0.9);
+      }
     }
   }
   .fixed-wrap {
