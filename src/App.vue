@@ -27,14 +27,20 @@ export default {
     } else if (code) {
       this.getInfoByCode(code);
     }
-  },
-  watch: {
-    $route() {
-      if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
+    window.addEventListener("pageshow", function(e) {
+      // 通过persisted属性判断是否存在 BF Cache
+      if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)&&e.persisted) {
         location.reload();
       }
-    }
+    });
   },
+  // watch: {
+  //   $route() {
+  //     if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
+  //       location.reload();
+  //     }
+  //   }
+  // },
   methods: {
     updateUser(data) {
       const { join, joinTotal, userInfo, userInfo: { openId } } = data;
