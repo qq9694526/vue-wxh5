@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Index from '@/pages/Index'
-import SignUp from '@/pages/SignUp'
 import Home from '@/pages/Home'
 import Register from '@/pages/Register'
 import Admin from '@/pages/Admin'
@@ -14,11 +13,6 @@ const routes = [
     path: '/',
     name: 'Index',
     component: Index
-  },
-  {
-    path: '/signup',
-    name: 'SignUp',
-    component: SignUp
   },
   {
     path: '/home',

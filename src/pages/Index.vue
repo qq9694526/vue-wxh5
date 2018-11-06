@@ -8,7 +8,7 @@
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
       </div>
-      <vue-seamless :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
+      <vue-seamless v-if="$parent.join.length>0" :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
         <div class="users-wrap">
           <div v-for="item in $parent.join" class="user">
             <img :src="item.wxPic" alt="">
@@ -26,49 +26,43 @@
         <x-img :src="src"></x-img>
       </div> -->
     </div>
-    <div class="bottom" v-if="user.userCate!=2">
-      <!-- <router-link class="circle" to="/register">成为商家</router-link> -->
-      <div class="circle" @click="$router.push('register')">成为商家</div>
+    <div class="bottom">
+      <router-link class="circle" to="/register">成为商家</router-link>
+      <!-- <div class="circle" @click="$router.push('register')">成为商家</div> -->
     </div>
     <a class="tel-fixed" href="tel:4008001234">
       <img src="../assets/img/icon-tel.png" alt="">
+    </a>
+    <a v-show="user.userCate==1" class="busi-fixed" href="/admin">
+      <img src="../assets/img/icon-admin.png" alt="">
     </a>
     <div class="aduio-wrap" @click="togglePlay">
       <img v-if="musicPlaying" src="../assets/img/music-runing.gif" alt="">
       <img v-else src="../assets/img/music-stop.png" alt="">
     </div>
     <audio id="audio" src="../../static/bg.mp3" autoplay loop></audio>
-    <!-- userCate//0-待审核商户，1-普通用户,2已审核商户,3-已报名用户（未缴费） -->
+    <!-- userState用户标示（0-普通用户，1，已报名（未缴费）） -->
     <div class="btn-fixed">
-      <img v-if="user.userCate!=2&&user.userCate!=3" @click="signupPopup=true" src="../assets/img/signup.png" alt="">
+      <img v-if="user.userState==0" @click="signupPopup=true" src="../assets/img/signup.png" alt="">
       <div v-else class="flex-btn">
         <div class="left">
           <img @click="showPoster" src="../assets/img/share.png" alt="">
         </div>
         <div class="right">
-          <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
-          <img v-else-if="user.userCate==3" @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
+          <img @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
         </div>
       </div>
-      <!-- <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
-      <img v-else-if="user.userCate==3" @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
-      <img v-else @click="signupPopup=true" src="../assets/img/signup.png" alt=""> -->
     </div>
-    <!-- <div>已报名{{$parent.joinTotal}}</div>
-    <router-link to="signup">立即报名</router-link>
-    <div>openId:{{user.openId}}</div>
-    <div>userName:{{user.userName}}</div>
-    <div>parentOpenId:{{$parent.parentOpenId}}</div> -->
     <div v-transfer-dom>
       <popup v-model="signupPopup" position="top">
         <div class="popup0">
           <group>
-            <x-input title="姓名" v-model="userName" required :disabled="user.userCate==3" is-type="china-name"></x-input>
-            <x-input title="手机" v-model="mobile" type="tel" required :disabled="user.userCate==3" is-type="china-mobile"></x-input>
+            <x-input title="姓名" v-model="userName" required :disabled="user.userState==1" is-type="china-name"></x-input>
+            <x-input title="手机" v-model="mobile" type="tel" required :disabled="user.userState==1" is-type="china-mobile"></x-input>
           </group>
-          <!-- <x-button @click.native="signUp">立即报名</x-button> -->
           <div class="btn-wrap">
-            <div class="btn" @click="signUp">立即报名</div>
+            <div v-if="user.userState==0" class="btn" @click="signUp">立即报名</div>
+            <div v-else class="btn">已报名</div>
           </div>
         </div>
       </popup>
@@ -142,14 +136,14 @@ export default {
       this.mobile = mobile;
     },
     "$parent.joinTotal"() {
-      this.numList = this.$parent.joinTotal.toString().split("");
+      this.numList = (this.$parent.joinTotal + "").split("");
     }
   },
   created() {
     const { userName, mobile } = this.user;
     this.userName = userName;
     this.mobile = mobile;
-    this.numList = toString(this.$parent.joinTotal).split("");
+    this.numList = (this.$parent.joinTotal + "").split("");
   },
   methods: {
     showPoster() {
@@ -451,6 +445,12 @@ export default {
   .tel-fixed {
     position: fixed;
     left: 10px;
+    bottom: 70px;
+    width: 50px;
+  }
+  .busi-fixed {
+    position: fixed;
+    right: 10px;
     bottom: 70px;
     width: 50px;
   }

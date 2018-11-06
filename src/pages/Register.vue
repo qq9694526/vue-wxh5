@@ -2,14 +2,14 @@
   <div class="p-register">
     <div class="title">申请成为商家</div>
     <group>
-      <x-input title="姓名" v-model="userName" required :disabled="user.userCate==0"></x-input>
-      <x-input title="手机" v-model="mobile" required :disabled="user.userCate==0" is-type="china-mobile"></x-input>
-      <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0"></x-input>
+      <x-input title="姓名" v-model="busiUsername" required :disabled="user.userCate==0||user.userCate==1"></x-input>
+      <x-input title="手机" v-model="busiMobile" required :disabled="user.userCate==0||user.userCate==1" is-type="china-mobile"></x-input>
+      <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0||user.userCate==1"></x-input>
     </group>
+    <!-- userCate（0-待审核商户，1-已审核商户，2-审核未通过商户） -->
     <div v-if="user.userCate==0" class="btn">审核中……</div>
+    <div v-else-if="user.userCate==1" class="btn">审核已通过</div>
     <div v-else class="btn" @click="submit">提交申请</div>
-    <!-- <x-button v-if="user.userCate==0">审核中……</x-button>
-    <x-button v-else type="primary" @click.native="submit">提交申请</x-button> -->
   </div>
 </template>
 <script>
@@ -22,8 +22,8 @@ export default {
   },
   data() {
     return {
-      userName: "",
-      mobile: "",
+      busiUsername: "",
+      busiMobile: "",
       busiName: ""
     };
   },
@@ -34,30 +34,36 @@ export default {
   },
   watch: {
     user() {
-      const { userName, mobile, busiName, openId, userCate } = this.user;
-      this.userName = userName || "";
-      this.mobile = mobile || "";
+      const {
+        busiUsername,
+        busiMobile,
+        busiName,
+        openId,
+        userCate
+      } = this.user;
+      this.busiUsername = busiUsername || "";
+      this.busiMobile = busiMobile || "";
       this.busiName = busiName || "";
     }
   },
   created() {
-    const { userName, mobile, busiName, openId, userCate } = this.user;
-    this.userName = userName;
-    this.mobile = mobile;
+    const { busiUsername, busiMobile, busiName, openId, userCate } = this.user;
+    this.busiUsername = busiUsername;
+    this.busiMobile = busiMobile;
     this.busiName = busiName;
   },
   methods: {
     submit() {
-      const { userName, mobile, busiName } = this,
+      const { busiUsername, busiMobile, busiName } = this,
         { openId } = this.user;
-      if (!userName || !mobile || !busiName) {
+      if (!busiUsername || !busiMobile || !busiName) {
         this.$vux.toast.text("请填写完整信息");
         return;
       }
       this.http
         .post(`/api/wx/add/busi`, {
-          userName,
-          mobile,
+          busiUsername,
+          busiMobile,
           busiName,
           openId
         })
