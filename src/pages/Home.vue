@@ -184,7 +184,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("支付成功");
-            this.$root.$children[0].getInfoByOpenId(openId);
+            this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -204,7 +204,7 @@ export default {
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
-          this.$root.$children[0].getInfoByOpenId(openId);
+          this.$store.commit("updateUser", openId);
         });
     },
     chooseImage() {

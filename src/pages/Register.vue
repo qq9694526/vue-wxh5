@@ -70,7 +70,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("提交成功");
-            this.$root.$children[0].getInfoByOpenId(openId);
+            this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }

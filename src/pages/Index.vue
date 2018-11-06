@@ -8,15 +8,15 @@
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
       </div>
-      <vue-seamless v-if="$parent.joinTotal>0" :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
+      <vue-seamless v-if="indexInfo.joinTotal>0" :data="indexInfo.join" :class-option="seamlessOption" class="vue-seamless">
         <div class="users-wrap">
-          <div v-for="item in $parent.join" class="user">
+          <div v-for="item in indexInfo.join" class="user">
             <img :src="item.wxPic" alt="">
             <div>{{item.userName}}</div>
           </div>
         </div>
       </vue-seamless>
-      <div class="pop-wrap">活动浏览量：{{$parent.pop}}</div>
+      <div class="pop-wrap">活动浏览量：{{indexInfo.pop}}</div>
       <img class="img-padding" src="../assets/img/4.png" alt="">
       <img class="img-padding" src="../assets/img/5.png" alt="">
       <img class="img-padding" src="../assets/img/6.png" alt="">
@@ -105,15 +105,13 @@ export default {
   computed: {
     user() {
       return this.$store.state.user;
-    }
-  },
-  watch: {
-    "$parent.joinTotal"() {
-      this.numList = (this.$parent.joinTotal + "").split("");
+    },
+    indexInfo() {
+      return this.$store.state.indexInfo;
     }
   },
   created() {
-    this.numList = (this.$parent.joinTotal + "").split("");
+    this.numList = (this.indexInfo.joinTotal + "").split("");
     const autoplay = localStorage.getItem("autoplay") == 1;
     if (!autoplay) {
       this.musicPlaying = false;

@@ -1,16 +1,16 @@
 <template>
-    <div class="p-signup">
-        <group>
-            <x-input title="宝宝姓名" v-model="userName" required :disabled="user.userState==1" is-type="china-name"></x-input>
-            <popup-picker title="性别" :data="sexList" v-model="sex" placeholder="请选择"></popup-picker>
-            <popup-picker title="年龄" :data="ageList" v-model="age" placeholder="请选择"></popup-picker>
-            <x-input title="家长电话" v-model="mobile" type="tel" required :disabled="user.userState==1" is-type="china-mobile"></x-input>
-        </group>
-        <div class="btn-wrap">
-            <div v-if="user.userState==0" class="btn" @click="signUp">立即报名</div>
-            <div v-else class="btn">已报名</div>
-        </div>
+  <div class="p-signup">
+    <group>
+      <x-input title="宝宝姓名" v-model="userName" required :disabled="user.userState==1" is-type="china-name"></x-input>
+      <popup-picker title="性别" :data="sexList" v-model="sex" placeholder="请选择"></popup-picker>
+      <popup-picker title="年龄" :data="ageList" v-model="age" placeholder="请选择"></popup-picker>
+      <x-input title="家长电话" v-model="mobile" type="tel" required :disabled="user.userState==1" is-type="china-mobile"></x-input>
+    </group>
+    <div class="btn-wrap">
+      <div v-if="user.userState==0" class="btn" @click="signUp">立即报名</div>
+      <div v-else class="btn">已报名</div>
     </div>
+  </div>
 </template>
 <script>
 import { XInput, Group, PopupPicker } from "vux";
@@ -57,7 +57,7 @@ export default {
           if (resp.errno == 0) {
             // this.$vux.toast.text("报名成功，请支付");
             //这个需要重新请求更新下user状态
-            this.$root.$children[0].getInfoByOpenId(openId);
+            this.$store.commit("updateUser", openId);
             this.goPay(openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
@@ -89,7 +89,7 @@ export default {
                 this.paySuccess(openId);
               },
               cancel: () => {
-                this.$root.$children[0].getInfoByOpenId(openId);
+                this.$store.commit("updateUser", openId);
               }
             });
             this.signupPopup = false;
@@ -106,7 +106,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("支付成功");
-            this.$root.$children[0].getInfoByOpenId(openId);
+            this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
