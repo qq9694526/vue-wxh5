@@ -40,7 +40,8 @@
       <img v-if="musicPlaying" src="../assets/img/music-runing.gif" alt="">
       <img v-else src="../assets/img/music-stop.png" alt="">
     </div>
-    <audio id="audio" src="../../static/bg.mp3" autoplay loop></audio>
+    <audio v-if="autoplay" id="audio" src="../../static/bg.mp3" autoplay loop></audio>
+    <audio v-else id="audio" src="../../static/bg.mp3" loop></audio>
     <!-- userState用户标示（0-普通用户，1，已报名（未缴费）） -->
     <div class="btn-fixed">
       <img v-if="user.userState==0" @click="signupPopup=true" src="../assets/img/signup.png" alt="">
@@ -91,6 +92,7 @@ export default {
   },
   data() {
     return {
+      autoplay: true,
       qrcodeSrc: "",
       posterSrc: "",
       isShowPoster: false,
@@ -125,8 +127,28 @@ export default {
   },
   created() {
     this.numList = (this.$parent.joinTotal + "").split("");
+    const autoplay = localStorage.getItem("autoplay") == 1;
+    if (!autoplay) {
+      this.musicPlaying = false;
+      this.autoplay = false;
+    }
   },
   methods: {
+    togglePlay() {
+      const isPlaying = this.musicPlaying,
+        audio = document.getElementById("audio");
+      if (isPlaying) {
+        this.musicPlaying = false;
+        audio.pause();
+        localStorage.setItem("autoplay", "0");
+        this.autoplay = false;
+      } else {
+        this.musicPlaying = true;
+        audio.play();
+        localStorage.setItem("autoplay", "1");
+        this.autoplay = true;
+      }
+    },
     showPoster() {
       this.isShowPoster = true;
       if (this.posterSrc) {
@@ -153,17 +175,6 @@ export default {
         self.qrcodeSrc = canvas.toDataURL("image/png");
         callback();
       });
-    },
-    togglePlay() {
-      const isPlaying = this.musicPlaying,
-        audio = document.getElementById("audio");
-      if (isPlaying) {
-        this.musicPlaying = false;
-        audio.pause();
-      } else {
-        this.musicPlaying = true;
-        audio.play();
-      }
     }
   }
 };
