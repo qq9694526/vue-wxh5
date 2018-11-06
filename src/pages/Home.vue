@@ -183,7 +183,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             this.$vux.toast.text("支付成功");
-            this.$parent.getInfoByOpenId(openId);
+            this.$root.$children[0].getInfoByOpenId(openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -203,7 +203,7 @@ export default {
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
-          this.$parent.getInfoByOpenId(openId);
+          this.$root.$children[0].getInfoByOpenId(openId);
         });
     },
     chooseImage() {

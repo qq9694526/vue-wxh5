@@ -56,14 +56,7 @@
     <div v-transfer-dom>
       <popup v-model="signupPopup" position="top">
         <div class="popup0">
-          <group>
-            <x-input title="姓名" v-model="userName" required :disabled="user.userState==1" is-type="china-name"></x-input>
-            <x-input title="手机" v-model="mobile" type="tel" required :disabled="user.userState==1" is-type="china-mobile"></x-input>
-          </group>
-          <div class="btn-wrap">
-            <div v-if="user.userState==0" class="btn" @click="signUp">立即报名</div>
-            <div v-else class="btn">已报名</div>
-          </div>
+          <sign-up></sign-up>
         </div>
       </popup>
     </div>
@@ -81,19 +74,17 @@
   </div>
 </template>
 <script>
-import { XButton, XInput, Group, Popup, TransferDom, XImg } from "vux";
-import { debug } from "util";
+import SignUp from "@/components/SignUp";
+import { Popup, TransferDom, XImg } from "vux";
 import vueSeamless from "vue-seamless-scroll";
 import html2canvas from "html2canvas";
 import QRCode from "qrcode";
 export default {
   components: {
-    XButton,
-    XInput,
-    Group,
     Popup,
     XImg,
-    vueSeamless
+    vueSeamless,
+    SignUp
   },
   directives: {
     TransferDom
@@ -105,8 +96,6 @@ export default {
       isShowPoster: false,
       musicPlaying: true,
       signupPopup: false,
-      userName: "",
-      mobile: "",
       imgList: [
         require("../assets/img/1.png"),
         require("../assets/img/2.png"),
@@ -130,19 +119,11 @@ export default {
     }
   },
   watch: {
-    user() {
-      const { userName, mobile } = this.user;
-      this.userName = userName;
-      this.mobile = mobile;
-    },
     "$parent.joinTotal"() {
       this.numList = (this.$parent.joinTotal + "").split("");
     }
   },
   created() {
-    const { userName, mobile } = this.user;
-    this.userName = userName;
-    this.mobile = mobile;
     this.numList = (this.$parent.joinTotal + "").split("");
   },
   methods: {
@@ -183,78 +164,6 @@ export default {
         this.musicPlaying = true;
         audio.play();
       }
-    },
-    signUp() {
-      const { userName, mobile } = this,
-        { openId } = this.user;
-      if (!userName || !mobile) {
-        this.$vux.toast.text("请填写完整信息");
-        return;
-      }
-      this.http
-        .post(`/api/wx/add/user`, {
-          userName,
-          mobile,
-          openId
-        })
-        .then(resp => {
-          if (resp.errno == 0) {
-            // this.$vux.toast.text("报名成功，请支付");
-            //这个需要重新请求更新下user状态
-            this.$parent.getInfoByOpenId(openId);
-            this.goPay(openId);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    },
-    goPay(openId) {
-      this.http
-        .form(`/api/wx/getSign`, {
-          openId
-        })
-        .then(resp => {
-          if (resp.errno == 0) {
-            const {
-              timeStamp: timestamp,
-              nonceStr,
-              package: packages, //package是严格模式下的保留字
-              signType,
-              paySign
-            } = resp.data;
-            wx.chooseWXPay({
-              timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-              nonceStr, // 支付签名随机串，不长于 32 位
-              package: packages, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
-              signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-              paySign, // 支付签名
-              success: res => {
-                // 支付成功后的回调函数
-                this.paySuccess(openId);
-              },
-              cancel: () => {
-                this.$parent.getInfoByOpenId(openId);
-              }
-            });
-            this.signupPopup = false;
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    },
-    paySuccess(openId) {
-      this.http
-        .form(`/api/wx/pay/check`, {
-          openId
-        })
-        .then(resp => {
-          if (resp.errno == 0) {
-            this.$vux.toast.text("支付成功");
-            this.$parent.getInfoByOpenId(openId);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-          }
-        });
     }
   }
 };
@@ -316,11 +225,7 @@ export default {
     padding-bottom: 20px;
   }
 }
-.btn-wrap {
-  width: 100%;
-  text-align: center;
-  margin-top: 20px;
-}
+
 .p-index {
   padding-bottom: 50px;
   background-image: url("../assets/img/bg.jpg");

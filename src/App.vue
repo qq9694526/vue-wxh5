@@ -43,6 +43,9 @@ export default {
       false
     );
   },
+  mounted() {
+    document.getElementById("audio").pause();
+  },
   methods: {
     updateUser(data) {
       const { join, joinTotal, pop, userInfo, userInfo: { openId } } = data;
@@ -83,14 +86,14 @@ export default {
           } else {
             this.$vux.toast.text(resp.errmsg);
             //未获取到用户信息 重新进行网页授权
-            const appid = "wx0090627ff1ff0a74",
-              url = encodeURIComponent(location.href.split("#")[0]);
-            location.href =
-              "http://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
-              appid +
-              "&redirect_uri=" +
-              url +
-              "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+            // const appid = "wx0090627ff1ff0a74",
+            //   url = encodeURIComponent(location.href.split("#")[0]);
+            // location.href =
+            //   "http://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+            //   appid +
+            //   "&redirect_uri=" +
+            //   url +
+            //   "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
           }
         });
     }
