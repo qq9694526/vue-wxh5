@@ -46,7 +46,7 @@
           <img @click="showPoster" src="../assets/img/share.png" alt="">
         </div>
         <div class="right">
-          <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/mymedal.png" alt="">
+          <img v-if="user.userCate==2" @click="$router.push('admin')" src="../assets/img/performance.png" alt="">
           <img v-else-if="user.userCate==3" @click="$router.push('home')" src="../assets/img/mymedal.png" alt="">
         </div>
       </div>
@@ -106,6 +106,7 @@ export default {
   },
   data() {
     return {
+      qrcodeSrc: "",
       posterSrc: "",
       isShowPoster: false,
       musicPlaying: true,
@@ -149,13 +150,14 @@ export default {
     this.userName = userName;
     this.mobile = mobile;
     this.numList = toString(this.$parent.joinTotal).split("");
-    this.pop = this.$parent.pop;
-    this.join = this.$parent.join;
   },
   methods: {
     showPoster() {
-      this.$vux.loading.show();
       this.isShowPoster = true;
+      if (this.posterSrc) {
+        return;
+      }
+      this.$vux.loading.show();
       const myPosterWrap = document.getElementById("posterWrap");
       this.useqrcode(() => {
         setTimeout(() => {
