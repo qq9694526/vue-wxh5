@@ -1,5 +1,6 @@
 <template>
   <div class="p-home">
+    <img class="logo-top" src="../assets/img/logo-top.png" alt="">
     <div class="userinfo">
       <img :src="user.wxPic" alt="">
       <div class="text">
@@ -292,7 +293,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url(../assets/img/bg.jpg);
+      background-image: url(../assets/img/medal-bg.png);
       background-size: 100% auto;
       background-repeat-y: repeat;
       .poster-top {
@@ -347,16 +348,22 @@ export default {
   }
 }
 .p-home {
-  background-image: url("../assets/img/bg.jpg");
+  background-image: url("../assets/img/medal-bg.png");
   background-size: 100% auto;
-  background-repeat: repeat-y;
-  padding: 30px 20px;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  padding: 0 20px;
   min-height: 100%;
   box-sizing: border-box;
   img {
     display: block;
     width: 60%;
     margin: 0 auto;
+  }
+  .logo-top {
+    width: 100%;
+    display: block;
+    padding: 10px 0;
   }
   .userinfo {
     display: flex;

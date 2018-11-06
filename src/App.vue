@@ -43,15 +43,16 @@ export default {
       false
     );
   },
-  mounted() {
-    document.getElementById("audio").pause();
-  },
   methods: {
     updateUser(data) {
       const { join, joinTotal, pop, userInfo, userInfo: { openId } } = data;
       this.wxsdk.setShare(openId);
-      let joinLimit = join.length % 5;
-      this.join = join.slice(0, join.length - joinLimit);
+      if (join.length > 5) {
+        let joinLimit = join.length % 5;
+        this.join = join.slice(0, join.length - joinLimit);
+      } else {
+        this.join = join;
+      }
       this.joinTotal = joinTotal;
       this.pop = pop;
       localStorage.setItem("openId", openId);

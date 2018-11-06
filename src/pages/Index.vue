@@ -8,7 +8,7 @@
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
       </div>
-      <vue-seamless v-if="$parent.join.length>0" :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
+      <vue-seamless v-if="$parent.joinTotal>0" :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
         <div class="users-wrap">
           <div v-for="item in $parent.join" class="user">
             <img :src="item.wxPic" alt="">
@@ -22,9 +22,6 @@
       <img class="img-padding" src="../assets/img/6.png" alt="">
       <img class="img-padding" src="../assets/img/7.png" alt="">
       <img class="img-padding" src="../assets/img/8.png" alt="">
-      <!-- <div v-for="(src,index) in imgList">
-        <x-img :src="src"></x-img>
-      </div> -->
     </div>
     <div class="bottom">
       <router-link class="circle" to="/register">成为商家</router-link>
@@ -98,16 +95,6 @@ export default {
       isShowPoster: false,
       musicPlaying: true,
       signupPopup: false,
-      imgList: [
-        require("../assets/img/1.png"),
-        require("../assets/img/2.png"),
-        require("../assets/img/3.png"),
-        require("../assets/img/4.png"),
-        require("../assets/img/5.png"),
-        require("../assets/img/6.png"),
-        require("../assets/img/7.png"),
-        require("../assets/img/8.png")
-      ],
       numList: [0],
       seamlessOption: {
         step: 0.5,
@@ -239,9 +226,6 @@ export default {
 
 .p-index {
   padding-bottom: 50px;
-  background-image: url("../assets/img/bg.jpg");
-  background-size: 100% auto;
-  background-repeat: repeat-y;
   min-height: 100%;
   box-sizing: border-box;
   .img-padding {
@@ -255,6 +239,7 @@ export default {
   .vue-seamless {
     overflow: hidden;
     height: 178px;
+    background-color: #515151;
   }
   .users-wrap {
     display: flex;
@@ -330,9 +315,10 @@ export default {
       display: block;
       width: auto;
       height: 100%;
-      height: 30px;
-      padding: 10px 0;
+      height: 50px;
       margin: 0 auto;
+      padding: 13px 0;
+      box-sizing: border-box;
     }
     .flex-btn {
       display: flex;
