@@ -22,7 +22,7 @@ export default {
             wx.onMenuShareAppMessage({
                 title: '中原首届国学文化艺术节',
                 desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
-                imgUrl: '../assets/img/shareimg.jpg',
+                imgUrl: "http://h5.ztuo.cn/img/shareimg.jpg",
                 link: origin + '?openId=' + openId,
             }, function (res) {
                 //这里是回调函数 
@@ -31,7 +31,7 @@ export default {
             wx.onMenuShareTimeline({
                 title: '中原首届国学文化艺术节',
                 desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
-                imgUrl: '../assets/img/shareimg.jpg',
+                imgUrl: "http://h5.ztuo.cn/img/shareimg.jpg",
                 link: origin + '?openId' + openId,
             }, function (res) {
                 //这里是回调函数 

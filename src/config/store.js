@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import util from '@/assets/js/util.js'
 import { ToastPlugin, LoadingPlugin } from 'vux'
+
+Vue.use(Vuex)
 Vue.use(ToastPlugin)
 Vue.use(LoadingPlugin)
-Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {

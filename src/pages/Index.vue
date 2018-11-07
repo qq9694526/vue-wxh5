@@ -118,6 +118,16 @@ export default {
       this.autoplay = false;
     }
   },
+  mounted() {
+    // 微信提供的事件，微信浏览器内部初始化完成后
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      () => {
+        document.getElementById("audio").load();
+      },
+      false
+    );
+  },
   methods: {
     togglePlay() {
       const isPlaying = this.musicPlaying,

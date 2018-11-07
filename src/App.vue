@@ -8,6 +8,7 @@
 export default {
   name: "app",
   created() {
+    console.log("appLoad")
     const parentOpenId = this.getUrlParam("openId") || "",
       code = this.getUrlParam("code"),
       openId = localStorage.getItem("openId");
@@ -23,14 +24,6 @@ export default {
         location.reload();
       }
     });
-    // 微信提供的事件，微信浏览器内部初始化完成后
-    document.addEventListener(
-      "WeixinJSBridgeReady",
-      () => {
-        document.getElementById("audio").load();
-      },
-      false
-    );
   },
   methods: {
     getInfoByCode(code, otherOpenId) {

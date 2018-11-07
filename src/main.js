@@ -25,9 +25,7 @@ Vue.prototype.getUrlParam = util.getUrlParam;
 Vue.prototype.wxsdk = wxsdk;
 
 
-const reqUrl = location.href.split('#')[0];
-// reqUrl = encodeURIComponent(reqUrl);
-wxsdk.initConfig(reqUrl);
+wxsdk.initConfig(location.href.split('#')[0]);
 
 
 FastClick.attach(document.body)

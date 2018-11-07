@@ -89,7 +89,6 @@ export default {
   },
   data() {
     return {
-      base64data: "",
       posterSrc: "",
       qrcodeSrc: "",
       isShowPoster: false
@@ -100,7 +99,10 @@ export default {
       return this.$store.state.user;
     }
   },
-  created() {},
+  created() {
+    this.wxsdk.initConfig(location.href.split("#")[0]);
+    this.wxsdk.setShare(this.user.openId);
+  },
   methods: {
     previewPoster() {
       this.isShowPoster = true;
@@ -144,7 +146,7 @@ export default {
         .then(resp => {
           if (resp.errno == 0) {
             //更新个人信息
-            this.$store.commit("updateUser", resp.data);
+            this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -260,8 +262,7 @@ export default {
           if (resp.errno == 0) {
             this.$vux.toast.text("上传成功");
             //更新个人信息
-            this.base64data = "data:image/jpeg;base64," + baseString;
-            this.$store.commit("updateUser", resp.data);
+            this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -440,6 +441,7 @@ export default {
     border-radius: 6px;
     background-color: #fff;
     padding: 10px 0;
+    margin-bottom: 20px;
     .item {
       flex: 0 0 50%;
       text-align: center;
