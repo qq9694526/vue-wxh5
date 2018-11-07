@@ -34,7 +34,7 @@
             <span>封面:{{item.picAddress?"已上传":"未上传"}}</span>
           </div>
           <div class="line">
-            <span>业绩:{{item.busiName}}</span>
+            <span>邀请商家:{{item.otherBusi||"无"}}</span>
             <span>{{item.createTime|dateFormat}}</span>
           </div>
         </div>

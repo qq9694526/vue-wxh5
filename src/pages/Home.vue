@@ -41,7 +41,7 @@
         <div class="img-wrap">
           <div class="img-place"></div>
           <img v-if="user.picAddress" :src="user.picAddress" alt="">
-          <div v-else class="">未上传</div>
+          <div v-else class="tip">未上传，建议图片比例1:1.25</div>
         </div>
         <div v-if="user.qrAddress" class="btn" @click="isShowPoster=true">我的海报</div>
         <div v-else-if="user.picAddress" class="btn" @click="createPoster">生成海报</div>
@@ -208,26 +208,28 @@ export default {
         });
     },
     chooseImage() {
-      const self = this;
+      // if (self.user.signUp < 3) {
+      //   this.$vux.toast.text("签到3次后才能上传哦");
+      //   return;
+      // }
       wx.chooseImage({
         count: 1, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: function(res) {
-          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          self.getLocalImg(localIds[0]);
+        success: res => {
+          const localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          this.getLocalImg(localIds[0]);
         }
       });
     },
     getLocalImg(localId) {
-      const self = this;
       wx.getLocalImgData({
         localId, // 图片的localID
-        success: function(res) {
-          var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+        success: res => {
+          let localData = res.localData; // localData是图片的base64数据，可以用img标签显示
           localData = localData.replace("jgp", "jpeg");
           localData = localData.replace("data:image/jpeg;base64,", "");
-          self.uploadImg(localData);
+          this.uploadImg(localData);
         }
       });
     },
@@ -439,6 +441,14 @@ export default {
             width: 100%;
             top: 0;
             height: 100%;
+          }
+          .tip {
+            position: absolute;
+            margin: 0 auto;
+            top: 40%;
+            color: #666;
+            text-align: center;
+            width: 100%;
           }
         }
       }

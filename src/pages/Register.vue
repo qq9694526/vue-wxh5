@@ -4,7 +4,7 @@
     <group>
       <x-input title="姓名" v-model="busiUsername" required :disabled="user.userCate==0||user.userCate==1"></x-input>
       <x-input title="手机" v-model="busiMobile" required :disabled="user.userCate==0||user.userCate==1" is-type="china-mobile"></x-input>
-      <x-input title="商户" v-model="busiName" required :disabled="user.userCate==0||user.userCate==1"></x-input>
+      <x-input title="商家名称" v-model="busiName" required :disabled="user.userCate==0||user.userCate==1"></x-input>
     </group>
     <!-- userCate（0-待审核商户，1-已审核商户，2-审核未通过商户） -->
     <div v-if="user.userCate==0" class="btn">审核中……</div>
