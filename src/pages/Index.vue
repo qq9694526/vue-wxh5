@@ -106,8 +106,10 @@ export default {
     user() {
       return this.$store.state.user;
     },
-    indexInfo() {
-      return this.$store.state.indexInfo;
+    indexInfo(value) {
+      const indexInfo = this.$store.state.indexInfo;
+      this.numList = (indexInfo.joinTotal + "").split("");
+      return indexInfo;
     }
   },
   created() {

@@ -9,7 +9,11 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         user: {},
-        indexInfo: {}
+        indexInfo: {
+            join: [],
+            joinTotal: 0,
+            pop: 0
+        }
     },
     mutations: {
         updateUser(state, data) {
@@ -30,8 +34,8 @@ const store = new Vuex.Store({
                     } else {
                         Vue.$vux.toast.text(resp.errmsg);
                         //未获取到用户信息，重新进行网页授权,用户被删除但本地存储有openId的情况
-                        localStorage.removeItem("openId");
-                        location.reload();
+                        window.localStorage.removeItem("openId");
+                        window.location.reload();
                     }
                 });
             } else {
