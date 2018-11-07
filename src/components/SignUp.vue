@@ -57,7 +57,7 @@ export default {
           if (resp.errno == 0) {
             // this.$vux.toast.text("报名成功，请支付");
             //这个需要重新请求更新下user状态
-            this.$store.commit("updateUser", openId);
+            // this.$store.commit("updateUser", openId);
             this.goPay(openId);
           } else {
             this.$vux.toast.text(resp.errmsg);

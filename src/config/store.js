@@ -21,7 +21,7 @@ const store = new Vuex.Store({
             if (typeof data == "string") {
                 Vue.$vux.loading.show();
                 util.http.form(`/api/wx/get/info`, {
-                    openId
+                    openId: data
                 }).then(resp => {
                     Vue.$vux.loading.hide();
                     if (resp.errno == 0) {

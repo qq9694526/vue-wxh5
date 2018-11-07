@@ -112,7 +112,7 @@ export default {
   },
   created() {
     this.numList = (this.indexInfo.joinTotal + "").split("");
-    const autoplay = localStorage.getItem("autoplay") == 1;
+    const autoplay = window.localStorage.getItem("autoplay") == 1;
     if (!autoplay) {
       this.musicPlaying = false;
       this.autoplay = false;
@@ -135,12 +135,12 @@ export default {
       if (isPlaying) {
         this.musicPlaying = false;
         audio.pause();
-        localStorage.setItem("autoplay", "0");
+        window.localStorage.setItem("autoplay", "0");
         this.autoplay = false;
       } else {
         this.musicPlaying = true;
         audio.play();
-        localStorage.setItem("autoplay", "1");
+        window.localStorage.setItem("autoplay", "1");
         this.autoplay = true;
       }
     },

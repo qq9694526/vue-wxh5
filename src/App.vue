@@ -8,10 +8,9 @@
 export default {
   name: "app",
   created() {
-    console.log("appLoad")
     const parentOpenId = this.getUrlParam("openId") || "",
       code = this.getUrlParam("code"),
-      openId = localStorage.getItem("openId");
+      openId = window.localStorage.getItem("openId");
     if (openId) {
       this.$store.commit("updateUser", openId);
       this.wxsdk.setShare(openId);
@@ -38,7 +37,7 @@ export default {
           if (resp.errno == 0) {
             const { userInfo: { openId } } = resp.data;
             this.wxsdk.setShare(openId);
-            localStorage.setItem("openId", openId);
+            window.localStorage.setItem("openId", openId);
             this.$store.commit("updateUser", resp.data);
           } else {
             this.$vux.toast.text(resp.errmsg);

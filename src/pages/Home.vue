@@ -41,7 +41,7 @@
         <div class="img-wrap" @click="chooseImage">
           <div class="img-place"></div>
           <img v-if="user.picAddress" :src="user.picAddress" alt="">
-          <div v-else class="tip">未上传，建议图片比例1:1.25</div>
+          <div v-else class="tip">建议图片比例1:1.25</div>
         </div>
         <div v-if="user.qrAddress" class="btn" @click="isShowPoster=true">我的海报</div>
         <div v-else-if="user.picAddress" class="btn" @click="previewPoster">海报预览</div>
@@ -100,8 +100,9 @@ export default {
     }
   },
   created() {
-    this.wxsdk.initConfig(location.href.split("#")[0]);
-    this.wxsdk.setShare(this.user.openId);
+    this.wxsdk.initConfig(location.href.split("#")[0], () => {
+      this.wxsdk.setShare(this.user.openId);
+    });
   },
   methods: {
     previewPoster() {
@@ -118,7 +119,6 @@ export default {
       setTimeout(() => {
         html2canvas(myPosterWrap).then(canvas => {
           this.posterSrc = canvas.toDataURL("image/png");
-          this.$vux.loading.hide();
           this.uploadPosterImg(this.posterSrc);
         });
       }, 1000);
@@ -144,13 +144,13 @@ export default {
           status: 1 //0-个人图片上传，1-合成图片上传
         })
         .then(resp => {
+          this.$vux.loading.hide();
           if (resp.errno == 0) {
             //更新个人信息
             this.$store.commit("updateUser", openId);
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
-          this.$vux.loading.hide();
         });
     },
     goPay() {
@@ -220,10 +220,10 @@ export default {
     },
     chooseImage() {
       const self = this;
-      // if (self.user.signUp < 3) {
-      //   this.$vux.toast.text("签到3次后才能上传哦");
-      //   return;
-      // }
+      if (self.user.signUp < 3) {
+        self.$vux.toast.text("签到3次后才能上传哦");
+        return;
+      }
       if (self.user.qrAddress) {
         return;
       }

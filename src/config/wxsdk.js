@@ -3,7 +3,7 @@ import util from '../assets/js/util.js'
 
 //获取jssdk需要的签名等参数
 export default {
-    initConfig: (reqUrl) => {
+    initConfig: (reqUrl, callback) => {
         util.http.post('/api/wx/get/sign', {
             reqUrl
         }).then((resp) => {
@@ -12,6 +12,9 @@ export default {
                 wx.config({
                     signature, appId, nonceStr, timestamp, debug: false, jsApiList: ["chooseWXPay", "chooseImage", "onMenuShareTimeline", "onMenuShareAppMessage", "getLocalImgData", "updateAppMessageShareData"]
                 })
+                if (callback) {
+                    callback();
+                }
             }
         })
     },
