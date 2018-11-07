@@ -64,7 +64,8 @@
         <img :src="posterSrc" alt="">
       </div>
       <div v-else id="posterWrap" class="poster-wrap">
-        <img src="../assets/img/poster.png" alt="">
+        <img src="../assets/img/poster.jpg" alt="">
+        <p class="text">我是【{{user.userName}}】特邀请你来参加“国学少年”</p>
         <img class="qrcode" :src="qrcodeSrc" alt="">
         <canvas id="canvas"></canvas>
       </div>
@@ -189,16 +190,22 @@ export default {
   .poster-wrap {
     position: relative;
     display: block;
-    width: 80%;
+    width: 85%;
     margin: 0 auto;
     > img {
       width: 100%;
     }
     .qrcode {
       position: absolute;
-      right: 16%;
-      bottom: 6%;
-      width: 31%;
+      right: 3%;
+      bottom: 0;
+      width: 25%;
+    }
+    .text{
+      position: absolute;
+      width: 100%;
+      bottom: 14%;
+      text-align: center;
     }
     .tip {
       position: absolute;

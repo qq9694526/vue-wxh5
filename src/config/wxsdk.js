@@ -20,17 +20,19 @@ export default {
         wx.ready(function () {
             //“分享给朋友”
             wx.onMenuShareAppMessage({
-                title: '分享给朋友',
-                desc: '我的openid' + openId,
+                title: '中原首届国学文化艺术节',
+                desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
+                imgUrl: '../assets/img/shareimg.jpg',
                 link: origin + '?openId=' + openId,
             }, function (res) {
                 //这里是回调函数 
             });
             //“分享到朋友圈”
             wx.onMenuShareTimeline({
-                title: '“分享到朋友圈”',
+                title: '中原首届国学文化艺术节',
+                desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
+                imgUrl: '../assets/img/shareimg.jpg',
                 link: origin + '?openId' + openId,
-                imgUrl: '',
             }, function (res) {
                 //这里是回调函数 
             });

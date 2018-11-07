@@ -208,6 +208,7 @@ export default {
         });
     },
     chooseImage() {
+      const self = this;
       // if (self.user.signUp < 3) {
       //   this.$vux.toast.text("签到3次后才能上传哦");
       //   return;
@@ -218,18 +219,19 @@ export default {
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: res => {
           const localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          this.getLocalImg(localIds[0]);
+          self.getLocalImg(localIds[0]);
         }
       });
     },
     getLocalImg(localId) {
+      const self = this;
       wx.getLocalImgData({
         localId, // 图片的localID
         success: res => {
           let localData = res.localData; // localData是图片的base64数据，可以用img标签显示
           localData = localData.replace("jgp", "jpeg");
           localData = localData.replace("data:image/jpeg;base64,", "");
-          this.uploadImg(localData);
+          self.uploadImg(localData);
         }
       });
     },
