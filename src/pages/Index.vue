@@ -1,9 +1,8 @@
 <template>
   <div class="p-index">
     <div class="main">
-      <img src="../assets/img/1.png" alt="">
-      <img src="../assets/img/2.png" alt="">
-      <img src="../assets/img/3.png" alt="">
+      <img src="../assets/img/1.jpg" alt="">
+      <img src="../assets/img/2.jpg" alt="">
       <div class="nums-wrap">
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
@@ -17,11 +16,9 @@
         </div>
       </vue-seamless>
       <div class="pop-wrap">活动浏览量：{{indexInfo.pop}}</div>
-      <img class="img-padding" src="../assets/img/4.png" alt="">
-      <img class="img-padding" src="../assets/img/5.png" alt="">
-      <img class="img-padding" src="../assets/img/6.png" alt="">
-      <img class="img-padding" src="../assets/img/7.png" alt="">
-      <img class="img-padding" src="../assets/img/8.png" alt="">
+      <img src="../assets/img/3.jpg" alt="">
+      <img src="../assets/img/4.jpg" alt="">
+      <img src="../assets/img/5.jpg" alt="">
     </div>
     <div class="bottom">
       <router-link class="circle" to="/register">成为商家</router-link>
@@ -60,7 +57,7 @@
     </div>
     <div class="poster-mask" :class="{hidden:!isShowPoster}" @click.self="isShowPoster=false">
       <div v-if="posterSrc" class="poster-wrap">
-        <p class="tip">↓↓长按图片可保存至本地或发送给朋友↓↓</p>
+        <p class="tip">↓↓长按图片保存至本地或发送给朋友↓↓</p>
         <img :src="posterSrc" alt="">
       </div>
       <div v-else id="posterWrap" class="poster-wrap">
@@ -190,7 +187,7 @@ export default {
   .poster-wrap {
     position: relative;
     display: block;
-    width: 85%;
+    width: 75%;
     margin: 0 auto;
     > img {
       width: 100%;
@@ -201,20 +198,22 @@ export default {
       bottom: 0;
       width: 25%;
     }
-    .text{
+    .text {
       position: absolute;
       width: 100%;
       bottom: 14%;
       text-align: center;
     }
     .tip {
-      position: absolute;
+      position: fixed;
       text-align: center;
       color: #fff;
       margin-bottom: 10px;
-      top: -30px;
+      top: 0;
       right: 0;
       left: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 15px;
     }
   }
 }
@@ -354,13 +353,13 @@ export default {
   .tel-fixed {
     position: fixed;
     left: 10px;
-    bottom: 70px;
+    bottom: 60px;
     width: 50px;
   }
   .busi-fixed {
     position: fixed;
     right: 10px;
-    bottom: 70px;
+    bottom: 60px;
     width: 50px;
   }
   .aduio-wrap {
