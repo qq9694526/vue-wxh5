@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Index from '@/pages/Index'
 import Home from '@/pages/Home'
+import Test from '@/pages/Test'
 import Register from '@/pages/Register'
 import Admin from '@/pages/Admin'
 import AdminPerformance from '@/components/AdminPerformance'
@@ -18,6 +19,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
   },
   {
     path: '/register',

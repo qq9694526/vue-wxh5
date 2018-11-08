@@ -229,7 +229,7 @@ export default {
       }
       wx.chooseImage({
         count: 1, // 默认9
-        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+        sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: res => {
           const localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
@@ -245,6 +245,11 @@ export default {
           let localData = res.localData; // localData是图片的base64数据，可以用img标签显示
           localData = localData.replace("jgp", "jpeg");
           localData = localData.replace("data:image/jpeg;base64,", "");
+          const imgSize = self.getImgSize(localData);
+          if (imgSize > 3 * 1024 * 1024) {
+            self.$vux.toast.text("图片不能超过3M,请压缩后上传");
+            return;
+          }
           self.uploadImg(localData);
         }
       });
@@ -268,6 +273,17 @@ export default {
           }
           this.$vux.loading.hide();
         });
+    },
+    getImgSize(base64url) {
+      //获取base64图片大小，返回MB数字
+      var str = base64url.replace("data:image/png;base64,", "");
+      var equalIndex = str.indexOf("=");
+      if (str.indexOf("=") > 0) {
+        str = str.substring(0, equalIndex);
+      }
+      var strLength = str.length;
+      var fileLength = parseInt(strLength - strLength / 8 * 2);
+      return fileLength;
     }
   }
 };
