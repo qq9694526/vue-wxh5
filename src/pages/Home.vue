@@ -9,32 +9,32 @@
       </div>
     </div>
     <div class="desc">
-      1、报名勋章，报名并支付报名费获取；</br>
-      2、签到勋章，签到3次获取；</br>
-      3、照片勋章，上传图片获取。
+      1、报名并支付报名费，点亮国学少年勋章；</br>
+      2、连续在朋友圈分享活动海报3天，打卡三天，点亮打卡勋章；</br>
+      3、到影楼选取孩子的国学少年模卡上传活动平台封面秀，攒够（50）人气值，点亮人气勋章
     </div>
     <div class="medal-wrap2">
       <div class="item">
         <img v-if="user.orPay==1" src="../assets/img/medal-1.png" alt="">
         <img v-else src="../assets/img/medal-1-0.png" alt="">
-        <p class="name">报名勋章</p>
+        <p class="name">国学少年勋章</p>
         <div v-if="user.orPay==1" class="btn">已支付</div>
         <div v-else class="btn" @click="goPay">继续支付</div>
       </div>
       <div class="item">
         <img v-if="user.signUp>=3" src="../assets/img/medal-2.png" alt="">
         <img v-else src="../assets/img/medal-2-0.png" alt="">
-        <p class="name">签到勋章</p>
-        <div v-if="user.remark3==1" class="btn">今日已签到</div>
-        <div v-else class="btn" @click="signUp">签到</div>
-        <div class="tip">已签到{{user.signUp||0}}次</div>
+        <p class="name">打卡勋章</p>
+        <div v-if="user.remark3==1" class="btn">今日已打卡</div>
+        <div v-else class="btn" @click="signUp">打卡</div>
+        <div class="tip">已打卡{{user.signUp||0}}次</div>
       </div>
     </div>
     <div class="medal-wrap">
       <div class="item left">
         <img v-if="user.picAddress" src="../assets/img/medal-3.png" alt="">
         <img v-else src="../assets/img/medal-3-0.png" alt="">
-        <p class="name">照片勋章</p>
+        <p class="name">人气勋章</p>
         <div class="tip">上传图片后可生成海报</div>
       </div>
       <div class="item right">
@@ -211,7 +211,7 @@ export default {
         .then(resp => {
           this.$vux.loading.hide();
           if (resp.errno == 0) {
-            this.$vux.toast.text("签到成功");
+            this.$vux.toast.text("打卡成功");
           } else {
             this.$vux.toast.text(resp.errmsg);
           }
@@ -221,7 +221,7 @@ export default {
     chooseImage() {
       const self = this;
       if (self.user.signUp < 3) {
-        self.$vux.toast.text("签到3次后才能上传哦");
+        self.$vux.toast.text("打卡3次后才能上传哦");
         return;
       }
       if (self.user.qrAddress) {
