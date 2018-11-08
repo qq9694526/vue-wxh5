@@ -14,9 +14,6 @@ module.exports = {
       '/zt-wx': {
         target: 'http://47.105.59.207:29090',  //目标接口域名
         changeOrigin: true,  //是否跨域
-        pathRewrite: {
-          '^/api': '/api'   //重写接口
-        }
       },
       '/connect': {
         target: 'http://open.weixin.qq.com',  //目标接口域名

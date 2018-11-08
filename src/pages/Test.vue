@@ -1,6 +1,8 @@
 <template>
     <div class="p-test">
         <h1>微信上传图片测试</h1>
+        <div class="btn" @click="$router.push('test1')">跳转Test1</div>
+
         <div class="btn" @click="chooseImage">上传图片</div>
         <div>
             文件大小：{{imgSize}}
@@ -27,7 +29,6 @@ export default {
     };
   },
   created() {
-    this.wxsdk.initConfig(location.href.split("#")[0]);
   },
   methods: {
     chooseImage() {

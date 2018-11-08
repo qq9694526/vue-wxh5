@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Index from '@/pages/Index'
 import Home from '@/pages/Home'
 import Test from '@/pages/Test'
+import Test1 from '@/pages/Test1'
 import Register from '@/pages/Register'
 import Admin from '@/pages/Admin'
 import AdminPerformance from '@/components/AdminPerformance'
@@ -19,6 +20,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/test1',
+    name: 'Test1',
+    component: Test1
   },
   {
     path: '/test',
