@@ -7,26 +7,15 @@
 <script>
 export default {
   name: "app",
-  data() {
-    return {
-      join: [],
-      joinTotal: 0,
-      pop: 0
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.state.user;
-    }
-  },
   created() {
-    this.parentOpenId = this.getUrlParam("openId") || "";
-    const code = this.getUrlParam("code"),
-      openId = localStorage.getItem("openId");
+    const parentOpenId = this.getUrlParam("openId") || "",
+      code = this.getUrlParam("code"),
+      openId = window.localStorage.getItem("openId");
     if (openId) {
-      this.getInfoByOpenId(openId);
+      this.$store.commit("updateUser", openId);
+      this.wxsdk.setShare(openId);
     } else if (code) {
-      this.getInfoByCode(code);
+      this.getInfoByCode(code, parentOpenId);
     }
     window.addEventListener("pageshow", function(e) {
       // 通过persisted属性判断是否存在 BF Cache
@@ -34,61 +23,24 @@ export default {
         location.reload();
       }
     });
-    // 微信提供的事件，微信浏览器内部初始化完成后
-    document.addEventListener(
-      "WeixinJSBridgeReady",
-      function() {
-        document.getElementById("audio").load();
-      },
-      false
-    );
   },
   methods: {
-    updateUser(data) {
-      const { join, joinTotal, pop, userInfo, userInfo: { openId } } = data;
-      this.wxsdk.setShare(openId);
-      if (join.length > 5) {
-        let joinLimit = join.length % 5;
-        this.join = join.slice(0, join.length - joinLimit);
-      } else {
-        this.join = join;
-      }
-      this.joinTotal = joinTotal;
-      this.pop = pop;
-      localStorage.setItem("openId", openId);
-      this.$store.commit("updateUser", userInfo);
-    },
-    getInfoByCode(code) {
+    getInfoByCode(code, otherOpenId) {
       this.$vux.loading.show();
       this.http
         .form(`/api/wx/info`, {
           code,
-          otherOpenId: this.parentOpenId
+          otherOpenId
         })
         .then(resp => {
           this.$vux.loading.hide();
           if (resp.errno == 0) {
-            this.updateUser(resp.data);
+            const { userInfo: { openId } } = resp.data;
+            this.wxsdk.setShare(openId);
+            window.localStorage.setItem("openId", openId);
+            this.$store.commit("updateUser", resp.data);
           } else {
             this.$vux.toast.text(resp.errmsg);
-          }
-        });
-    },
-    getInfoByOpenId(openId) {
-      this.$vux.loading.show();
-      this.http
-        .form(`/api/wx/get/info`, {
-          openId
-        })
-        .then(resp => {
-          this.$vux.loading.hide();
-          if (resp.errno == 0) {
-            this.updateUser(resp.data);
-          } else {
-            this.$vux.toast.text(resp.errmsg);
-            //未获取到用户信息 重新进行网页授权
-            localStorage.removeItem("openId");
-            location.reload();
           }
         });
     }

@@ -5,16 +5,16 @@
   <meta charset="utf-8">
   <!-- <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0"> -->
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-  <title>wxh5</title>
+  <title>国学少年</title>
   <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
   <script>
     // 网页授权之获取code
     const code = getUrlParam("code"),
-      openId = localStorage.getItem("openId");
+      openId = window.localStorage.getItem("openId");
     if (!openId && !code) {
       const appid = "wx0090627ff1ff0a74",
         url = encodeURIComponent(location.href.split('#')[0]);
-      location.href = 'http://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + url + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+      window.location.href = 'http://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + url + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
     }
     //获取url中参数
     function getUrlParam(name) {

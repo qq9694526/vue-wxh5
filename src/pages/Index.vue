@@ -1,27 +1,24 @@
 <template>
   <div class="p-index">
     <div class="main">
-      <img src="../assets/img/1.png" alt="">
-      <img src="../assets/img/2.png" alt="">
-      <img src="../assets/img/3.png" alt="">
+      <img src="../assets/img/1.jpg" alt="">
+      <img src="../assets/img/2.jpg" alt="">
       <div class="nums-wrap">
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
       </div>
-      <vue-seamless v-if="$parent.joinTotal>0" :data="$parent.join" :class-option="seamlessOption" class="vue-seamless">
+      <vue-seamless v-if="indexInfo.joinTotal>0" :data="indexInfo.join" :class-option="seamlessOption" class="vue-seamless">
         <div class="users-wrap">
-          <div v-for="item in $parent.join" class="user">
+          <div v-for="item in indexInfo.join" class="user">
             <img :src="item.wxPic" alt="">
             <div>{{item.userName}}</div>
           </div>
         </div>
       </vue-seamless>
-      <div class="pop-wrap">活动浏览量：{{$parent.pop}}</div>
-      <img class="img-padding" src="../assets/img/4.png" alt="">
-      <img class="img-padding" src="../assets/img/5.png" alt="">
-      <img class="img-padding" src="../assets/img/6.png" alt="">
-      <img class="img-padding" src="../assets/img/7.png" alt="">
-      <img class="img-padding" src="../assets/img/8.png" alt="">
+      <div class="pop-wrap">活动浏览量：{{indexInfo.pop}}</div>
+      <img src="../assets/img/3.jpg" alt="">
+      <img src="../assets/img/4.jpg" alt="">
+      <img src="../assets/img/5.jpg" alt="">
     </div>
     <div class="bottom">
       <router-link class="circle" to="/register">成为商家</router-link>
@@ -60,11 +57,12 @@
     </div>
     <div class="poster-mask" :class="{hidden:!isShowPoster}" @click.self="isShowPoster=false">
       <div v-if="posterSrc" class="poster-wrap">
-        <p class="tip">↓↓长按图片可保存至本地或发送给朋友↓↓</p>
+        <p class="tip">↓↓长按图片保存至本地或发送给朋友↓↓</p>
         <img :src="posterSrc" alt="">
       </div>
       <div v-else id="posterWrap" class="poster-wrap">
-        <img src="../assets/img/poster.png" alt="">
+        <img src="../assets/img/poster.jpg" alt="">
+        <p class="text">我是【{{user.userName}}】特邀请你来参加“国学少年”</p>
         <img class="qrcode" :src="qrcodeSrc" alt="">
         <canvas id="canvas"></canvas>
       </div>
@@ -105,20 +103,30 @@ export default {
   computed: {
     user() {
       return this.$store.state.user;
-    }
-  },
-  watch: {
-    "$parent.joinTotal"() {
-      this.numList = (this.$parent.joinTotal + "").split("");
+    },
+    indexInfo(value) {
+      const indexInfo = this.$store.state.indexInfo;
+      this.numList = (indexInfo.joinTotal + "").split("");
+      return indexInfo;
     }
   },
   created() {
-    this.numList = (this.$parent.joinTotal + "").split("");
-    const autoplay = localStorage.getItem("autoplay") == 1;
+    this.numList = (this.indexInfo.joinTotal + "").split("");
+    const autoplay = window.localStorage.getItem("autoplay") == 1;
     if (!autoplay) {
       this.musicPlaying = false;
       this.autoplay = false;
     }
+  },
+  mounted() {
+    // 微信提供的事件，微信浏览器内部初始化完成后
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      () => {
+        document.getElementById("audio").load();
+      },
+      false
+    );
   },
   methods: {
     togglePlay() {
@@ -127,12 +135,12 @@ export default {
       if (isPlaying) {
         this.musicPlaying = false;
         audio.pause();
-        localStorage.setItem("autoplay", "0");
+        window.localStorage.setItem("autoplay", "0");
         this.autoplay = false;
       } else {
         this.musicPlaying = true;
         audio.play();
-        localStorage.setItem("autoplay", "1");
+        window.localStorage.setItem("autoplay", "1");
         this.autoplay = true;
       }
     },
@@ -189,25 +197,33 @@ export default {
   .poster-wrap {
     position: relative;
     display: block;
-    width: 80%;
+    width: 75%;
     margin: 0 auto;
     > img {
       width: 100%;
     }
     .qrcode {
       position: absolute;
-      right: 16%;
-      bottom: 6%;
-      width: 31%;
+      right: 3%;
+      bottom: 0;
+      width: 25%;
+    }
+    .text {
+      position: absolute;
+      width: 100%;
+      bottom: 14%;
+      text-align: center;
     }
     .tip {
-      position: absolute;
+      position: fixed;
       text-align: center;
       color: #fff;
       margin-bottom: 10px;
-      top: -30px;
+      top: 0;
       right: 0;
       left: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 15px;
     }
   }
 }
@@ -347,13 +363,13 @@ export default {
   .tel-fixed {
     position: fixed;
     left: 10px;
-    bottom: 70px;
+    bottom: 60px;
     width: 50px;
   }
   .busi-fixed {
     position: fixed;
     right: 10px;
-    bottom: 70px;
+    bottom: 60px;
     width: 50px;
   }
   .aduio-wrap {

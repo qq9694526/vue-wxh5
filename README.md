@@ -1,10 +1,10 @@
-# wxh5
+# 国学少年
 
-> 报名系统wx端
+> 一个基于VUE开发的微信H5页面，包含报名、签到、上传图片、微信支付、生成分享海报及后台管理统计功能。
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
@@ -13,9 +13,9 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 应用到的技术或框架
+1. vux，基于Vue的UI框架；
+2. qrcode.js，生成二维码图片；
+3. html2canvas，dom转图片，用于生成海报。
