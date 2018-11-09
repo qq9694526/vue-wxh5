@@ -2,7 +2,6 @@
   <div class="p-index">
     <div class="main">
       <img src="../assets/img/1.jpg" alt="">
-      <img src="../assets/img/2.jpg" alt="">
       <div class="nums-wrap">
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
@@ -16,6 +15,7 @@
         </div>
       </vue-seamless>
       <div class="pop-wrap">活动浏览量：{{indexInfo.pop}}</div>
+      <img src="../assets/img/2.jpg" alt="">
       <img src="../assets/img/3.jpg" alt="">
       <img src="../assets/img/4.jpg" alt="">
       <img src="../assets/img/5.jpg" alt="">
@@ -112,18 +112,28 @@ export default {
   },
   created() {
     this.numList = (this.indexInfo.joinTotal + "").split("");
-    const autoplay = window.localStorage.getItem("autoplay") == 1;
+    const autoplay =
+      window.sessionStorage.getItem("autoplay") == 1 ||
+      window.sessionStorage.getItem("autoplay") == null;
     if (!autoplay) {
       this.musicPlaying = false;
       this.autoplay = false;
+    } else {
+      this.musicPlaying = true;
     }
   },
   mounted() {
+    console.log(this.musicPlaying);
     // 微信提供的事件，微信浏览器内部初始化完成后
     document.addEventListener(
       "WeixinJSBridgeReady",
       () => {
         document.getElementById("audio").load();
+        if (this.musicPlaying) {
+          document.getElementById("audio").play();
+        } else {
+          document.getElementById("audio").pause();
+        }
       },
       false
     );
@@ -135,12 +145,12 @@ export default {
       if (isPlaying) {
         this.musicPlaying = false;
         audio.pause();
-        window.localStorage.setItem("autoplay", "0");
+        window.sessionStorage.setItem("autoplay", "0");
         this.autoplay = false;
       } else {
         this.musicPlaying = true;
         audio.play();
-        window.localStorage.setItem("autoplay", "1");
+        window.sessionStorage.setItem("autoplay", "1");
         this.autoplay = true;
       }
     },
@@ -241,8 +251,9 @@ export default {
 }
 
 .p-index {
+  min-height: calc(100% + 1px);
   padding-bottom: 50px;
-  min-height: 100%;
+  // min-height: 100%;
   box-sizing: border-box;
   .img-padding {
     // width: 85%;

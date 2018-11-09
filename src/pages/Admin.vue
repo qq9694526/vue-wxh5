@@ -7,10 +7,10 @@
             <tabbar-item link="/">
                 <span slot="label">活动首页</span>
             </tabbar-item>
-            <tabbar-item selected link="/admin/performance">
+            <tabbar-item :selected="currentPath==='/admin/performance'||currentPath==='/admin'" link="/admin/performance">
                 <span slot="label">我的业绩</span>
             </tabbar-item>
-            <tabbar-item link="/admin/ranklist">
+            <tabbar-item :selected="currentPath==='/admin/ranklist'" link="/admin/ranklist">
                 <span slot="label">排行榜</span>
             </tabbar-item>
         </tabbar>
@@ -25,14 +25,26 @@ export default {
     Tabbar,
     TabbarItem
   },
-  created(){
-      console.log(this.$route.path)
+  data() {
+    return {
+      currentPath: "/admin/performancen"
+    };
+  },
+  created() {
+    this.currentPath = this.$route.path;
+  },
+  watch: {
+    $route(to, from) {
+      this.currentPath = to.path;
+    }
   }
 };
 </script>
 <style scoped lang="less">
 .p-admin {
+  min-height: calc(100% + 1px);
   padding-bottom: 50px;
+  box-sizing: border-box;
   .weui-tabbar {
     position: fixed;
   }

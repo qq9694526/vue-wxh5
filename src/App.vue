@@ -76,6 +76,9 @@ body {
   left: 0;
   top: 0;
 }
+.vux-popup-dialog.vux-popup-picker{
+  z-index: 502;
+}
 .btn {
   display: inline-block;
   width: 130px;
