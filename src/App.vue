@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <audio id="audio" src="./static/bg.mp3" autoplay loop></audio>
   </div>
 </template>
 
@@ -17,12 +18,24 @@ export default {
     } else if (code) {
       this.getInfoByCode(code, parentOpenId);
     }
+  },
+  mounted() {
     window.addEventListener("pageshow", function(e) {
       // 通过persisted属性判断是否存在 BF Cache
       if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent) && e.persisted) {
         location.reload();
       }
     });
+    // 微信提供的事件，微信浏览器内部初始化完成后
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      () => {
+        if (!window.sessionStorage.getItem("stopMusic")) {
+          document.getElementById("audio").load();
+        }
+      },
+      false
+    );
   },
   methods: {
     getInfoByCode(code, otherOpenId) {
@@ -76,7 +89,7 @@ body {
   left: 0;
   top: 0;
 }
-.vux-popup-dialog.vux-popup-picker{
+.vux-popup-dialog.vux-popup-picker {
   z-index: 502;
 }
 .btn {

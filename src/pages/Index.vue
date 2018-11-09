@@ -34,9 +34,6 @@
       <img v-if="musicPlaying" src="../assets/img/music-runing.gif" alt="">
       <img v-else src="../assets/img/music-stop.png" alt="">
     </div>
-    <audio id="audio" src="../../static/bg.mp3" autoplay loop></audio>
-    <!-- <audio v-if="autoplay" id="audio" src="../../static/bg.mp3" autoplay loop></audio>
-    <audio v-else id="audio" src="../../static/bg.mp3" loop></audio> -->
     <!-- userState用户标示（0-普通用户，1，已报名（未缴费）） -->
     <div class="btn-fixed">
       <img v-if="user.userState==0" @click="signupPopup=true" src="../assets/img/signup.png" alt="">
@@ -113,40 +110,8 @@ export default {
   },
   created() {
     this.numList = (this.indexInfo.joinTotal + "").split("");
-    // const autoplay =
-    //   window.sessionStorage.getItem("autoplay") == 1 ||
-    //   window.sessionStorage.getItem("autoplay") == null;
-    // if (!autoplay) {
-    //   this.musicPlaying = false;
-    //   this.autoplay = false;
-    // } else {
-    //   this.musicPlaying = true;
-    // }
-    if (window.sessionStorage.getItem("autoplay") == 0) {
+    if (window.sessionStorage.getItem("stopMusic")) {
       this.musicPlaying = false;
-    }
-  },
-  mounted() {
-    console.log("musicPlaying:" + this.musicPlaying);
-    const audio = document.getElementById("audio");
-    // 微信提供的事件，微信浏览器内部初始化完成后
-    document.addEventListener(
-      "WeixinJSBridgeReady",
-      () => {
-        audio.load();
-        if (this.musicPlaying) {
-          audio.play();
-        } else {
-          audio.pause();
-        }
-      },
-      false
-    );
-    if (this.musicPlaying && audio) {
-      audio.load();
-      audio.play();
-    } else {
-      audio.pause();
     }
   },
   methods: {
@@ -156,13 +121,11 @@ export default {
       if (isPlaying) {
         this.musicPlaying = false;
         audio.pause();
-        window.sessionStorage.setItem("autoplay", "0");
-        this.autoplay = false;
+        window.sessionStorage.setItem("stopMusic", "true");
       } else {
         this.musicPlaying = true;
         audio.play();
-        window.sessionStorage.setItem("autoplay", "1");
-        this.autoplay = true;
+        window.sessionStorage.removeItem("stopMusic");
       }
     },
     showPoster() {
