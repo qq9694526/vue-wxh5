@@ -413,7 +413,8 @@ export default {
   background-repeat: no-repeat;
   background-color: #fff;
   padding: 0 20px;
-  min-height: 100%;
+  // min-height: 100%;
+  min-height: calc(100% + 1px);
   box-sizing: border-box;
   img {
     display: block;
