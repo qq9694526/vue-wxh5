@@ -35,18 +35,22 @@
         <img v-if="user.picAddress" src="../assets/img/medal-3.png" alt="">
         <img v-else src="../assets/img/medal-3-0.png" alt="">
         <p class="name">人气勋章</p>
-        <div class="tip">上传图片后可生成海报</div>
+        <!-- <div class="tip">上传图片后可生成海报</div> -->
       </div>
       <div class="item right">
-        <div class="img-wrap" @click="chooseImage">
+        <div class="img-wrap" @click="lookImage">
           <div class="img-place"></div>
           <img v-if="user.picAddress" :src="user.picAddress" alt="">
           <div v-else class="tip">建议图片比例1:1.25</div>
         </div>
-        <div v-if="user.qrAddress" class="btn" @click="isShowPoster=true">我的海报</div>
+        <div class="btn" @click="chooseImage">上传图片</div>
+        <!-- <div v-if="user.qrAddress" class="btn" @click="isShowPoster=true">我的海报</div>
         <div v-else-if="user.picAddress" class="btn" @click="previewPoster">海报预览</div>
-        <div v-else class="btn" @click="chooseImage">上传图片</div>
+        <div v-else class="btn" @click="chooseImage">上传图片</div> -->
       </div>
+    </div>
+    <div class="poster-mask" :class="{hidden:!isShowImage}" @click.self="isShowImage=false">
+      <img class="picimg" :src="user.picAddress" alt="">
     </div>
     <div class="poster-mask" :class="{hidden:!isShowPoster}" @click.self="isShowPoster=false">
       <div v-if="user.qrAddress" class="poster-wrap">
@@ -91,7 +95,8 @@ export default {
     return {
       posterSrc: "",
       qrcodeSrc: "",
-      isShowPoster: false
+      isShowPoster: false,
+      isShowImage: false
     };
   },
   computed: {
@@ -105,6 +110,11 @@ export default {
     });
   },
   methods: {
+    lookImage(){
+      if(this.user.picAddress){
+        this.isShowImage=true;
+      }
+    },
     previewPoster() {
       this.isShowPoster = true;
       const myPosterWrap = document.getElementById("posterWrap");
@@ -224,9 +234,9 @@ export default {
         self.$vux.toast.text("打卡3次后才能上传哦");
         return;
       }
-      if (self.user.qrAddress) {
-        return;
-      }
+      // if (self.user.qrAddress) {
+      //   return;
+      // }
       wx.chooseImage({
         count: 1, // 默认9
         sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
@@ -282,7 +292,7 @@ export default {
         str = str.substring(0, equalIndex);
       }
       var strLength = str.length;
-      var fileLength = parseInt(strLength - strLength / 8 * 2);
+      var fileLength = parseInt(strLength - (strLength / 8) * 2);
       return fileLength;
     }
   }
@@ -319,6 +329,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
+  >img.picimg{
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+  }
   &.hidden {
     display: none;
   }
@@ -468,7 +483,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding-bottom: 20px;
+        // padding-bottom: 20px;
         .name {
           font-size: 14px;
           color: #666;
