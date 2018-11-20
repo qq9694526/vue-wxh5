@@ -23,7 +23,7 @@ export default {
         wx.ready(function () {
             //“分享给朋友”
             wx.onMenuShareAppMessage({
-                title: '中原首届国学文化艺术节',
+                title: '腾讯·大豫网丨中原首届国学文化艺术节丨尉氏赛区',
                 desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
                 imgUrl: "http://h5.ztuo.cn/img/shareimg.jpg",
                 link: origin + '?openId=' + openId,
@@ -32,7 +32,7 @@ export default {
             });
             //“分享到朋友圈”
             wx.onMenuShareTimeline({
-                title: '中原首届国学文化艺术节',
+                title: '腾讯·大豫网丨中原首届国学文化艺术节丨尉氏赛区',
                 desc: '为国学打call 为少年加油 国学少年成长路期待您的参与',
                 imgUrl: "http://h5.ztuo.cn/img/shareimg.jpg",
                 link: origin + '?openId' + openId,
