@@ -1,7 +1,8 @@
 <template>
   <div class="p-index">
     <div class="main">
-      <img src="../assets/img/1.jpg" alt="">
+      <!-- <x-img :src="require('../assets/img/1.jpg')"></x-img> -->
+      <x-img src="https://zhengtuo.oss-cn-qingdao.aliyuncs.com/1.jpg"></x-img>
       <div class="nums-wrap">
         已经有
         <span v-for="item in numList" class="num">{{item}}</span>位宝宝报名
@@ -15,10 +16,14 @@
         </div>
       </vue-seamless>
       <div class="pop-wrap">活动浏览量：{{indexInfo.pop}}</div>
-      <img src="../assets/img/2.jpg" alt="">
-      <img src="../assets/img/3.jpg" alt="">
-      <img src="../assets/img/4.jpg" alt="">
-      <img src="../assets/img/5.jpg" alt="">
+      <x-img src="https://zhengtuo.oss-cn-qingdao.aliyuncs.com/2.jpg"></x-img>
+      <x-img src="https://zhengtuo.oss-cn-qingdao.aliyuncs.com/3.jpg"></x-img>
+      <x-img src="https://zhengtuo.oss-cn-qingdao.aliyuncs.com/4.jpg"></x-img>
+      <x-img src="https://zhengtuo.oss-cn-qingdao.aliyuncs.com/5.jpg"></x-img>
+      <!-- <x-img :src="require('../assets/img/2.jpg')"></x-img>
+      <x-img :src="require('../assets/img/3.jpg')"></x-img>
+      <x-img :src="require('../assets/img/4.jpg')"></x-img>
+      <x-img :src="require('../assets/img/5.jpg')"></x-img> -->
     </div>
     <div class="bottom">
       <router-link class="circle" to="/register">成为商家</router-link>
@@ -184,6 +189,7 @@ export default {
     width: 75%;
     margin: 0 auto;
     > img {
+      display: block;
       width: 100%;
     }
     .qrcode {
@@ -223,7 +229,9 @@ export default {
     padding-bottom: 20px;
   }
 }
-
+.p-index .main > img {
+  vertical-align: top;
+}
 .p-index {
   min-height: calc(100% + 1px);
   padding-bottom: 50px;
@@ -233,10 +241,10 @@ export default {
     // width: 85%;
     margin: 40px auto;
   }
-  img {
-    display: block;
-    width: 100%;
-  }
+  // img {
+  //   display: block;
+  //   width: 100%;
+  // }
   .vue-seamless {
     overflow: hidden;
     height: 178px;
@@ -350,12 +358,20 @@ export default {
     left: 10px;
     bottom: 60px;
     width: 50px;
+    img {
+      display: block;
+      width: 100%;
+    }
   }
   .busi-fixed {
     position: fixed;
     right: 10px;
     bottom: 60px;
     width: 50px;
+    img {
+      display: block;
+      width: 100%;
+    }
   }
   .aduio-wrap {
     position: fixed;
