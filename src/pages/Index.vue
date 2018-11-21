@@ -29,7 +29,7 @@
       <router-link class="circle" to="/register">成为商家</router-link>
       <!-- <div class="circle" @click="$router.push('register')">成为商家</div> -->
     </div>
-    <a class="tel-fixed" href="tel:4008001234">
+    <a class="tel-fixed" href="tel:037127955777">
       <img src="../assets/img/icon-tel.png" alt="">
     </a>
     <a v-show="user.userCate==1" class="busi-fixed" href="/admin">
