@@ -21,4 +21,4 @@ npm run build
 3. html2canvas，dom转图片，用于生成海报。
 ## 开发总结
 记录开发过程中遇到的问题以及如何解决的。   
-https://blog.csdn.net/qq9694526/article/details/83868461
+https://juejin.im/post/5c0490ef51882524cb6f5652
